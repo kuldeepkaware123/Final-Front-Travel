@@ -50,18 +50,18 @@ const _user_nav = [
     to: '/user/booking',
     icon: <FaSwatchbook size={22} icon={cilSpeedometer} customClassName="nav-icon" />,
   },
-  {
-    component: CNavItem,
-    name: 'My Enquiry',
-    to: '/user/enquiry',
-    icon: <TbProgressHelp size={22} icon={cilSpeedometer} customClassName="nav-icon" />,
-  },
-  {
-    component: CNavItem,
-    name: 'Create Enquiry',
-    to: '/user/create/enquiry',
-    icon: <VscGitPullRequestCreate size={22} icon={cilSpeedometer} customClassName="nav-icon" />,
-  },
+  // {
+  //   component: CNavItem,
+  //   name: 'My Enquiry',
+  //   to: '/user/enquiry',
+  //   icon: <TbProgressHelp size={22} icon={cilSpeedometer} customClassName="nav-icon" />,
+  // },
+  // {
+  //   component: CNavItem,
+  //   name: 'Create Enquiry',
+  //   to: '/user/create/enquiry',
+  //   icon: <VscGitPullRequestCreate size={22} icon={cilSpeedometer} customClassName="nav-icon" />,
+  // },
 ]
 
 export default _user_nav

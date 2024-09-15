@@ -159,7 +159,7 @@ function Header() {
                     </li>
 
                     <li>
-                      <Link to="/hot/deals">Hotels</Link>
+                      <Link to="/hotels">Hotels</Link>
                     </li>
                     <li>
                       <Link to="/blogs">Blogs</Link>

@@ -31,6 +31,7 @@ import RecomndedTrip from '../components1/RecomndedTrip'
 import { setBookingData, setIsBookingClicked, setUpdatePackageData } from '../store'
 import { IoClose } from 'react-icons/io5'
 import ItenaryPage from '../components1/ItenaryPage'
+import RecmmendedHotels from '../components1/RecmmendedHotels'
 
 function PackageDynamic() {
   const [packageData, setPackageData] = useState(null)
@@ -290,7 +291,6 @@ function PackageDynamic() {
     <>
       <Header />
 
-
       <section
         className="breadcrumb-main pb-20 pt-14"
         style={{
@@ -501,9 +501,9 @@ function PackageDynamic() {
                           'Download Itinerary'
                         )}
                       </Button>
-                      <p onClick={handleShow} className="ms-3 cursor-pointer">
+                      {/* <p onClick={handleShow} className="ms-3 cursor-pointer">
                         <FaQuestionCircle /> &nbsp; Trip Enquiry
-                      </p>
+                      </p> */}
                     </Col>
                   </Row>
                 </div>
@@ -816,8 +816,8 @@ function PackageDynamic() {
                               className="px-3 py-5 rounded-2"
                             >
                               {packageData &&
-                                packageData.fixedDeparture &&
-                                packageData.fixedDeparture.type === true ? (
+                              packageData.fixedDeparture &&
+                              packageData.fixedDeparture.type === true ? (
                                 <>
                                   <h5 className="text-white">Fixed Departure</h5>
                                   <div>
@@ -859,21 +859,21 @@ function PackageDynamic() {
                                           ₹{' '}
                                           {packageData && packageData.offer
                                             ? calculateDiscountedPrice(
-                                              packageData.offer.type,
-                                              fixedOption === 'tripleSharing'
-                                                ? packageData &&
-                                                packageData.fixedDeparture.tripleSharing
-                                                  .totalPrice
-                                                : packageData &&
-                                                packageData.fixedDeparture.doubleSharing
-                                                  .totalPrice,
-                                              packageData.offer.value,
-                                            )
+                                                packageData.offer.type,
+                                                fixedOption === 'tripleSharing'
+                                                  ? packageData &&
+                                                      packageData.fixedDeparture.tripleSharing
+                                                        .totalPrice
+                                                  : packageData &&
+                                                      packageData.fixedDeparture.doubleSharing
+                                                        .totalPrice,
+                                                packageData.offer.value,
+                                              )
                                             : fixedOption === 'tripleSharing'
                                               ? packageData &&
-                                              packageData.fixedDeparture.tripleSharing.totalPrice
+                                                packageData.fixedDeparture.tripleSharing.totalPrice
                                               : packageData &&
-                                              packageData.fixedDeparture.doubleSharing.totalPrice}
+                                                packageData.fixedDeparture.doubleSharing.totalPrice}
                                         </b>{' '}
                                         <sub>/ Group</sub> &nbsp;
                                         <Button
@@ -911,16 +911,16 @@ function PackageDynamic() {
                                           ₹{' '}
                                           {packageData && packageData.offer
                                             ? calculateDiscountedPrice(
-                                              packageData.offer.type,
-                                              packageData.costOptions.totalPrice,
-                                              packageData.offer.value,
-                                            )
+                                                packageData.offer.type,
+                                                packageData.costOptions.totalPrice,
+                                                packageData.offer.value,
+                                              )
                                             : packageData.costOptions.totalPrice}
                                         </b>{' '}
                                         <sub>
                                           /{' '}
                                           {packageData &&
-                                            packageData.costOptions.type === 'total cost'
+                                          packageData.costOptions.type === 'total cost'
                                             ? 'Per Couple'
                                             : 'Per Person'}
                                         </sub>{' '}
@@ -969,27 +969,27 @@ function PackageDynamic() {
                                     ₹{' '}
                                     {packageData && packageData.offer
                                       ? parseInt(
-                                        calculateDiscountedPrice(
-                                          packageData.offer.type,
-                                          parseInt(
-                                            fixedOption === 'tripleSharing'
-                                              ? packageData &&
-                                              packageData.fixedDeparture.tripleSharing
-                                                .totalPrice
-                                              : packageData &&
-                                              packageData.fixedDeparture.doubleSharing
-                                                .totalPrice,
+                                          calculateDiscountedPrice(
+                                            packageData.offer.type,
+                                            parseInt(
+                                              fixedOption === 'tripleSharing'
+                                                ? packageData &&
+                                                    packageData.fixedDeparture.tripleSharing
+                                                      .totalPrice
+                                                : packageData &&
+                                                    packageData.fixedDeparture.doubleSharing
+                                                      .totalPrice,
+                                            ),
+                                            packageData.offer.value,
                                           ),
-                                          packageData.offer.value,
-                                        ),
-                                      ) * groupSize
+                                        ) * groupSize
                                       : parseInt(
-                                        fixedOption === 'tripleSharing'
-                                          ? packageData &&
-                                          packageData.fixedDeparture.tripleSharing.totalPrice
-                                          : packageData &&
-                                          packageData.fixedDeparture.doubleSharing.totalPrice,
-                                      ) * groupSize}
+                                          fixedOption === 'tripleSharing'
+                                            ? packageData &&
+                                                packageData.fixedDeparture.tripleSharing.totalPrice
+                                            : packageData &&
+                                                packageData.fixedDeparture.doubleSharing.totalPrice,
+                                        ) * groupSize}
                                     /-
                                   </b>{' '}
                                   &nbsp;
@@ -1018,15 +1018,15 @@ function PackageDynamic() {
                                     ₹{' '}
                                     {packageData && packageData.offer
                                       ? calculateDiscountedPrice(
-                                        packageData.offer.type,
-                                        parseInt(
-                                          packageData && packageData.costOptions.totalPrice,
-                                        ),
-                                        packageData.offer.value,
-                                      ) * groupSize
+                                          packageData.offer.type,
+                                          parseInt(
+                                            packageData && packageData.costOptions.totalPrice,
+                                          ),
+                                          packageData.offer.value,
+                                        ) * groupSize
                                       : parseInt(
-                                        packageData && packageData.costOptions.totalPrice,
-                                      ) * groupSize}
+                                          packageData && packageData.costOptions.totalPrice,
+                                        ) * groupSize}
                                     /-
                                   </b>{' '}
                                   &nbsp;
@@ -1058,6 +1058,8 @@ function PackageDynamic() {
             <RecomndedTrip
               destinationId={(packageData && packageData.destination[0]._id) || null}
             />
+
+            <RecmmendedHotels hotels={packageData && packageData.hotels} />
           </div>
         </div>
       </section>

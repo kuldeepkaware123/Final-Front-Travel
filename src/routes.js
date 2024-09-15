@@ -73,6 +73,9 @@ const HotDeals = React.lazy(() => import('./views/hotDeals/HotDeals.js'))
 const AddBlog = React.lazy(() => import('./views/blog/AddBlog.js'))
 const AllBlogs = React.lazy(() => import('./views/blog/AllBlogs.js'))
 const EditBlog = React.lazy(() => import('./views/blog/EditBlog.js'))
+const AddHotel = React.lazy(() => import('./views/hotels/Addhotel.js'))
+const AllHotels = React.lazy(() => import('./views/hotels/AllHotel.js'))
+const EditHotel = React.lazy(() => import('./views/hotels/EditHotel.js'))
 const TripType = React.lazy(() => import('./views/tripType/TripType.js'))
 const Destinations = React.lazy(() => import('./views/Destinations/Destinations.js'))
 const PackageManager = React.lazy(() => import('./views/contact/PackageManager.js'))
@@ -119,6 +122,9 @@ const routes = [
   { path: '/admin/blogs/add', name: 'Add Blogs', element: AddBlog },
   { path: '/admin/blogs/all', name: 'All Blogs', element: AllBlogs },
   { path: '/admin/blogs/edit/:id', name: 'Edit Blogs', element: EditBlog },
+  { path: '/admin/hotels/add', name: 'Add Blogs', element: AddHotel },
+  { path: '/admin/hotels/all', name: 'All Blogs', element: AllHotels },
+  { path: '/admin/hotels/edit/:id', name: 'Edit Blogs', element: EditHotel },
   { path: '/admin/manage/payments-term', name: 'Payment Term', element: PaymentTerm },
   { path: '/admin/manage/travel', name: 'Travel Essentials', element: TravelEssentials },
   { path: '/admin/manage/term-conditions', name: 'Term Conditions', element: TermConditions },

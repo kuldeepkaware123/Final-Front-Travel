@@ -189,8 +189,8 @@ function BlogDetails() {
                           <div
                             className={
                               blog.otherImages.length === 1
-                                ? 'col-md-12 col-sm-12 col-xs-12'
-                                : 'col-md-6 col-sm-6 col-xs-12'
+                                ? 'col-md-12 col-sm-12 col-xs-12 mt-4'
+                                : 'col-md-6 col-sm-6 col-xs-12 mt-4'
                             }
                           >
                             <img src={image} alt="image" className="rounded" />

@@ -1,7 +1,7 @@
 import React from 'react'
 import CIcon from '@coreui/icons-react'
 import { HiMiniUsers } from 'react-icons/hi2'
-import { FaBoxesPacking, FaTruckMoving } from 'react-icons/fa6'
+import { FaBoxesPacking, FaHotel, FaTruckMoving } from 'react-icons/fa6'
 import { FaBoxOpen, FaCar } from 'react-icons/fa'
 import { FaServer } from 'react-icons/fa'
 import { TbPackages } from 'react-icons/tb'
@@ -58,11 +58,11 @@ const _new_nav = [
         name: 'Hot Deals',
         to: '/admin/hot/deals',
       },
-      {
-        component: CNavItem,
-        name: 'Enquiry',
-        to: '/admin/enquiry',
-      },
+      // {
+      //   component: CNavItem,
+      //   name: 'Enquiry',
+      //   to: '/admin/enquiry',
+      // },
     ],
   },
   {
@@ -93,21 +93,39 @@ const _new_nav = [
       },
     ],
   },
+  // {
+  //   component: CNavGroup,
+  //   name: 'Car',
+  //   to: '/base',
+  //   icon: <FaCar size={22} icon={cilUserPlus} customClassName="nav-icon" />,
+  //   items: [
+  //     {
+  //       component: CNavItem,
+  //       name: 'Add Car',
+  //       to: '/admin/car/add',
+  //     },
+  //     {
+  //       component: CNavItem,
+  //       name: 'All Cars',
+  //       to: '/admin/car/all',
+  //     },
+  //   ],
+  // },
   {
     component: CNavGroup,
-    name: 'Car',
+    name: 'Hotels',
     to: '/base',
-    icon: <FaCar size={22} icon={cilUserPlus} customClassName="nav-icon" />,
+    icon: <FaHotel size={22} icon={cilUserPlus} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,
-        name: 'Add Car',
-        to: '/admin/car/add',
+        name: 'Add Hotel',
+        to: '/admin/hotels/add',
       },
       {
         component: CNavItem,
-        name: 'All Cars',
-        to: '/admin/car/all',
+        name: 'All Hotels',
+        to: '/admin/hotels/all',
       },
     ],
   },
@@ -204,11 +222,11 @@ const _new_nav = [
         name: 'Banners',
         to: '/admin/banner',
       },
-      {
-        component: CNavItem,
-        name: 'Rajasthan',
-        to: '/admin/rajasthan',
-      },
+      // {
+      //   component: CNavItem,
+      //   name: 'Rajasthan',
+      //   to: '/admin/rajasthan',
+      // },
       {
         component: CNavItem,
         name: 'Best Tour',

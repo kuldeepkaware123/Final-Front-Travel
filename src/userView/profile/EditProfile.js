@@ -18,10 +18,16 @@ function EditProfile() {
     phone: '',
   })
 
+  console.log(token);
+  
+
   const fetchProfile = async (token) => {
     try {
       let res = await MyAPI.GET('/user/profile', token)
       let { success, message, error, user } = res.data || res
+
+      console.log(res);
+      
       if (success) {
         setProfile(user)
       } else {
@@ -172,7 +178,7 @@ function EditProfile() {
                       <Form.Control
                         type="date"
                         name="dateOfBirth"
-                        value={profile.dateOfBirth.substring(0, 10)}
+                        value={profile?.dateOfBirth?.substring(0, 10)}
                         onChange={handleInputChange}
                         readOnly={!isEditing}
                       />

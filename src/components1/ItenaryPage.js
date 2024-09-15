@@ -7,8 +7,8 @@ import html2canvas from 'html2canvas'
 import { TiTick } from 'react-icons/ti'
 import { IoClose } from 'react-icons/io5'
 import { Link } from 'react-router-dom'
-import PDFFooter from '../assets/images/pdf-footer.png'
-import PDFHeader from '../assets/images/pdf-header.png'
+import PDFFooter from '../assets/images/pdf-footer2.png'
+import PDFHeader from '../assets/images/pdf-header2.png'
 import PDFTST from '../assets/images/ibrahim-rifath-X_6lI192qgs-unsplash.jpg'
 import useIsMobile from './useIsMobile'
 import { MyError } from '../MyAPI'
@@ -223,14 +223,10 @@ const ItenaryPage = forwardRef(({ packageData, enquiryData, loading, setLoading 
       <Row
         id="header"
         className={`mb-2 px-4 in-header ${!loading && 'd-none'} `}
-      // style={{ background: '#244855' }}
+        // style={{ background: '#244855' }}
       >
         <Col md={12} className="d-flex align-items-center justify-content-end mt-2">
-          <img
-            src=""
-            alt="Logo"
-            style={{ width: '80px', height: 'auto', objectFit: 'contain' }}
-          />
+          <img src="" alt="Logo" style={{ width: '80px', height: 'auto', objectFit: 'contain' }} />
         </Col>
       </Row>
       <div className={`${!loading && 'd-none'}`} ref={printRef}>
@@ -238,7 +234,7 @@ const ItenaryPage = forwardRef(({ packageData, enquiryData, loading, setLoading 
           <Row
             id="header"
             className={`mb-2 px-4 in-header ${loading && 'd-none'} `}
-          // style={{ background: '#244855' }}
+            // style={{ background: '#244855' }}
           >
             <Col md={12} className="d-flex align-items-center justify-content-end">
               <img
@@ -373,8 +369,8 @@ const ItenaryPage = forwardRef(({ packageData, enquiryData, loading, setLoading 
                   <b className="text-dark">Number of persons :</b> &nbsp;
                   {enquiryData &&
                     parseInt(enquiryData.noOfAdults || '0') +
-                    parseInt(enquiryData.noOfChildrenAbove6 || '0') +
-                    parseInt(enquiryData.noOfChildrenBelow6 || '0')}
+                      parseInt(enquiryData.noOfChildrenAbove6 || '0') +
+                      parseInt(enquiryData.noOfChildrenBelow6 || '0')}
                 </Col>
                 <Col md={12}>
                   <b className="text-dark">Package Cost :</b> &nbsp;
@@ -386,10 +382,10 @@ const ItenaryPage = forwardRef(({ packageData, enquiryData, loading, setLoading 
                   <b className="text-dark">Booking Date :</b> &nbsp;
                   {enquiryData?.StartDate
                     ? new Intl.DateTimeFormat('en-GB', {
-                      day: '2-digit',
-                      month: 'short',
-                      year: 'numeric',
-                    }).format(new Date(enquiryData?.StartDate))
+                        day: '2-digit',
+                        month: 'short',
+                        year: 'numeric',
+                      }).format(new Date(enquiryData?.StartDate))
                     : 'Not Available'}
                 </Col>
               </Row>
@@ -650,9 +646,9 @@ const ItenaryPage = forwardRef(({ packageData, enquiryData, loading, setLoading 
             className="d-flex align-items-center justify-content-center gap-1 flex-column"
           >
             <hr style={{ height: '2px' }} />
-            <p>Hardev Colony, Sita Bari, Jaipur, Rajasthan 302011</p>
+            <p>Your Address goes here</p>
             <Link to={'mailto:info@PuruliaRoutes.com'}>info@PuruliaRoutes.com</Link>
-            <p>+91-9672153193</p>
+            <p>+91-7001424500</p>
             <div className="d-flex gap-3 mt-2">
               <a
                 href="https://www.instagram.com/Purulia_routes/?igsh=NTl1dTFydDVpNjhm"

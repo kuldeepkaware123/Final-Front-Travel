@@ -1,61 +1,33 @@
-/* eslint-disable react/no-unknown-property */
-/* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import Header from '../components1/Header'
 import Footer from '../components1/Footer'
 import WhatsAppHelp from '../components1/WhatsAppHelp'
 import { Link, useNavigate } from 'react-router-dom'
-import 'react-phone-input-2/lib/style.css'
-import { MyAPI, MyError, MyToken } from '../MyAPI'
-import { useDispatch, useSelector } from 'react-redux'
-import { setToken, setUserId } from '../store'
+import { MyAPI, MyError } from '../MyAPI'
 import { Spinner } from 'react-bootstrap'
 
-function LogIn() {
+const SignUP = () => {
   const [loading, setLoading] = useState(false)
+  const [userName, setUserName] = useState('')
   const [email, setEmail] = useState('')
+  const [phone, setPhone] = useState('')
   const [password, setPassword] = useState('')
   const navigate = useNavigate()
 
-  const dispatch = useDispatch()
-
-  const storeToken = useSelector((state) => state.token)
-  const storeBooking = useSelector((state) => state.booking)
-  let token = MyToken.getItem()
-
-  useEffect(() => {
-    if (storeToken && !storeBooking.redirectBack) {
-      navigate('/user/dashboard')
-    }
-    if (storeToken && storeBooking.redirectBack) {
-      navigate(storeBooking.redirectBack)
-    }
-    if (token && !storeBooking.redirectBack) {
-      dispatch(setToken(token))
-      navigate('/user/dashboard')
-    }
-  }, [storeToken, token])
-
-  const handleLogin = async () => {
+  const handleRegister = async () => {
+    setLoading(true)
     try {
-      setLoading(true)
-      let res = await MyAPI.POST('/user/login', {
+      const response = await MyAPI.POST('/userSignup', {
+        userName,
         email,
+        phone,
         password,
       })
-      let { success, message, error, token, userId } = res.data || res
-      console.log(res)
-
-      if (success) {
-        MyError.success(message)
-        MyToken.setItem(token)
-        localStorage.setItem('userId', userId)
-        dispatch(setUserId(userId))
-        dispatch(setToken(token))
-        localStorage.setItem('isUser', true)
-        localStorage.removeItem('isAdmin')
+      //   console.log(response.data)
+      if (response.data.success) {
+        navigate('/login')
       } else {
-        MyError.warn(message || error || 'Server Error Please try again later')
+        MyError.warn(response.data.message)
       }
     } catch (error) {
       MyError.error(error.message)
@@ -63,7 +35,6 @@ function LogIn() {
       setLoading(false)
     }
   }
-
   return (
     <>
       <Header />
@@ -73,9 +44,18 @@ function LogIn() {
           <div className="log-main blog-full log-reg w-75 mx-auto">
             <div className="row align-items-center justify-content-center">
               <div className="col-lg-6 pe-4">
-                <h3 className="text-center border-b pb-2">Login</h3>
+                <h3 className="text-center border-b pb-2">Register</h3>
 
                 <form method="post" action="#" name="mobileloginform" id="mobileloginform">
+                  <div className="form-group mb-2">
+                    <input
+                      type="text"
+                      className="border-2"
+                      placeholder="Enter your userName"
+                      onChange={(e) => setUserName(e.target.value)}
+                      value={userName}
+                    />
+                  </div>
                   <div className="form-group mb-2">
                     <input
                       type="email"
@@ -85,7 +65,15 @@ function LogIn() {
                       value={email}
                     />
                   </div>
-
+                  <div className="form-group mb-2">
+                    <input
+                      type="number"
+                      className="border-2"
+                      placeholder="Enter your phone"
+                      onChange={(e) => setPhone(e.target.value)}
+                      value={phone}
+                    />
+                  </div>
                   <div className="form-group mb-2">
                     <input
                       type="password"
@@ -97,7 +85,7 @@ function LogIn() {
                   </div>
 
                   <p>
-                    Don't have an account? <Link to="/signup">Register</Link>
+                    Already have an account? <Link to="/login">Login</Link>
                   </p>
 
                   <div className="comment-btn mb-2 pb-2 text-center border-b">
@@ -107,11 +95,11 @@ function LogIn() {
                       </Spinner>
                     ) : (
                       <input
-                        onClick={handleLogin}
+                        onClick={handleRegister}
                         type="button"
                         className="nir-btn w-100"
                         id="submit2"
-                        value="Login"
+                        value="Register"
                       />
                     )}
                   </div>
@@ -128,4 +116,4 @@ function LogIn() {
   )
 }
 
-export default LogIn
+export default SignUP

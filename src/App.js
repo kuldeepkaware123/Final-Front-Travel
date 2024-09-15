@@ -31,12 +31,15 @@ const ExploreIndia = React.lazy(() => import('./pages/ExploreIndia.js'))
 const AboutPage = React.lazy(() => import('./pages/AboutPage.js'))
 const BlogsPage = React.lazy(() => import('./pages/BlogsPage.js'))
 const BlogDetails = React.lazy(() => import('./pages/BlogDetails.js'))
+const HotelDetails = React.lazy(() => import('./pages/HotelDetails.js'))
 const TourPackage = React.lazy(() => import('./pages/TourPackage.js'))
 const PackageDynamic = React.lazy(() => import('./pages/PackageDynamic.js'))
 const PackageDynamicPrivate = React.lazy(() => import('./pages/PackageDynamicPrivate.js'))
 const CarRentel = React.lazy(() => import('./pages/CarRentel.js'))
 const HotDeals = React.lazy(() => import('./pages/HotDeals.js'))
+const Hotels = React.lazy(() => import('./pages/Hotels.js'))
 const LogIn = React.lazy(() => import('./pages/LogIn.js'))
+const SignUP = React.lazy(() => import('./pages/SignUP.js'))
 const Register = React.lazy(() => import('./views/pages/register/Register'))
 const Page404 = React.lazy(() => import('./views/pages/page404/Page404'))
 const Page500 = React.lazy(() => import('./views/pages/page500/Page500'))
@@ -86,12 +89,15 @@ const App = () => {
           <Route path="/blogs" element={<BlogsPage />} />
           <Route path="/user/checkout/" element={<CheckOut />} />
           <Route path="/blog/:id" element={<BlogDetails />} />
+          <Route path="/hotel/:id" element={<HotelDetails />} />
           <Route path="/:id" element={<TourPackage />} />
           <Route path="/package/:id" element={<PackageDynamic />} />
           <Route path="/package/private/:enquiryId/:id" element={<PackageDynamicPrivate />} />
           <Route path="/book/car" element={<CarRentel />} />
           <Route path="/hot/deals" element={<HotDeals />} />
+          <Route path="/hotels" element={<Hotels />} />
           <Route path="/login" element={<LogIn />} />
+          <Route path="/signup" element={<SignUP />} />
           <Route path="/explore/india" element={<ExploreIndia />} />
           <Route path="/term&condition" element={<TermAndConditionPage />} />
           <Route path="/payments" element={<PaymentsPage />} />

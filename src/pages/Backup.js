@@ -1,10 +1,14 @@
 /* eslint-disable react/jsx-key */
 /* eslint-disable prettier/prettier */
 import React, { useEffect, useState } from 'react'
-import { Button, Col, DropdownButton, Form, Row, Spinner } from 'react-bootstrap'
+import { Button, Col, Container, DropdownButton, Form, Row, Spinner } from 'react-bootstrap'
+import { IoMdClose } from 'react-icons/io'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import FixedDepartureForm from './FixedDepartureForm'
 import Editor from 'react-simple-wysiwyg'
+import { IoAdd } from 'react-icons/io5'
 import { IoCloseOutline } from 'react-icons/io5'
+import SelectMultipleOptions from './SelectMultipleOptions'
 import ImageUploader from './ImageUploader'
 import { MyAPI, MyError } from '../../MyAPI'
 import { useDispatch, useSelector } from 'react-redux'
@@ -125,6 +129,10 @@ function AddPackages() {
 
   const [dayActivities, setDayActivities] = useState([{ heading: '', description: '' }])
 
+  const handleAddDayActivity = () => {
+    setDayActivities([...dayActivities, { heading: '', description: '' }])
+  }
+
   const handleDayActivityChange = (index, field, value) => {
     const newDayActivities = [...dayActivities]
     newDayActivities[index] = {
@@ -171,8 +179,46 @@ function AddPackages() {
     setHotels([])
   }, [numNights])
 
+  const handleHotelChange = (index, event) => {
+    const newHotels = [...hotels]
+    newHotels[index][event.target.name] = event.target.value
+    setHotels(newHotels)
+  }
+
+  const handleNightsChange = (index, night) => {
+    const newHotels = [...hotels]
+    const currentNights = newHotels[index].nights
+    if (currentNights.includes(night)) {
+      newHotels[index].nights = currentNights.filter((n) => n !== night)
+    } else {
+      newHotels[index].nights = [...currentNights, night]
+    }
+    setHotels(newHotels)
+  }
+
+  const handleAddHotel = () => {
+    setHotels([...hotels, { name: '', nights: [], star: '', city: '', description: '' }])
+  }
+
+  const handleRemoveHotel = (index) => {
+    const newHotels = [...hotels]
+    newHotels.splice(index, 1)
+    setHotels(newHotels)
+  }
+
+  const getAvailableNights = (index) => {
+    const selectedNights = hotels.reduce((acc, hotel, i) => {
+      if (i !== index) {
+        return acc.concat(hotel.nights)
+      }
+      return acc
+    }, [])
+    return [...Array(numNights).keys()].map((n) => n + 1).filter((n) => !selectedNights.includes(n))
+  }
+
   // variables
   const [title, setTitle] = useState('')
+  const [destination, setDestination] = useState('')
   const [description, setDescription] = useState('')
 
   //flight
@@ -195,11 +241,6 @@ function AddPackages() {
       return
     }
 
-    if (!AllHotelsSelected || AllHotelsSelected.length === 0) {
-      MyError.warn('Please Select Hotels')
-      return
-    }
-
     if (!description) {
       MyError.warn('Please Enter Description')
       return
@@ -215,7 +256,6 @@ function AddPackages() {
         title,
         destination: AllDestinationsSelected,
         tripType: AllTripTypeSelected,
-        hotels: AllHotelsSelected,
         description,
       }),
     )
@@ -234,6 +274,7 @@ function AddPackages() {
         nights: numNights,
         flightDescription,
         cabDescription,
+        hotels,
         dayActivities,
       }),
     )
@@ -288,12 +329,16 @@ function AddPackages() {
       formData.append(`tripType[${index}]`, item)
     })
 
-    packageData.hotels.forEach((item, index) => {
-      formData.append(`hotels[${index}]`, item)
-    })
-
     storeUploadImages.forEach((image, index) => {
       formData.append('galleryImages', image)
+    })
+
+    packageData.hotels.forEach((item, index) => {
+      formData.append(`hotels[${index}][name]`, item.name)
+      formData.append(`hotels[${index}][rating]`, item.star)
+      formData.append(`hotels[${index}][city]`, item.city)
+      formData.append(`hotels[${index}][nights]`, item.nights)
+      formData.append(`hotels[${index}][description]`, item.description)
     })
 
     packageData.dayActivities.forEach((item, index) => {
@@ -667,6 +712,94 @@ function AddPackages() {
               )}
             </Form.Group>
           </Col>
+
+          <hr className="mt-2 mb-2" />
+
+          {/* <HotelForm numHDays={numDays} numHNights={10} /> */}
+
+          <Container>
+            <Col className="d-flex align-items-center justify-content-between">
+              <h5 className="poppins">Add Hotel</h5>
+              <Button size="sm" variant="primary" onClick={handleAddHotel}>
+                <IoAdd size={22} />
+              </Button>
+            </Col>
+            {hotels.map((hotel, index) => (
+              <Row key={index} className="mb-3">
+                <Col md={6}>
+                  <Form.Group className="mt-2">
+                    <Form.Label className="small-font">Hotel Name</Form.Label>
+                    <Form.Control
+                      type="text"
+                      name="name"
+                      className="input-border small-font"
+                      value={hotel.name}
+                      onChange={(e) => handleHotelChange(index, e)}
+                      placeholder="Enter hotel name"
+                    />
+                  </Form.Group>
+                </Col>
+                <Col md={3}>
+                  <Form.Group className="mt-2">
+                    <Form.Label className="small-font">Star Rating</Form.Label>
+                    <Form.Control
+                      type="text"
+                      name="star"
+                      className="input-border small-font"
+                      value={hotel.star}
+                      onChange={(e) => handleHotelChange(index, e)}
+                      placeholder="Enter star rating"
+                    />
+                  </Form.Group>
+                </Col>
+                <Col md={3}>
+                  <Form.Group className="mt-2">
+                    <Form.Label className="small-font">City</Form.Label>
+                    <Form.Control
+                      type="text"
+                      name="city"
+                      className="input-border small-font"
+                      value={hotel.city}
+                      onChange={(e) => handleHotelChange(index, e)}
+                      placeholder="Enter city"
+                    />
+                  </Form.Group>
+                </Col>
+                <Col md={12}>
+                  <SelectMultipleOptions
+                    availableNights={getAvailableNights(index)}
+                    selectedNights={hotel.nights}
+                    onNightsChange={(night) => handleNightsChange(index, night)}
+                  />
+                </Col>
+                <Col md={12}>
+                  <Form.Group className="mt-2">
+                    <Form.Label className="small-font">Description</Form.Label>
+                    <Form.Control
+                      as="textarea"
+                      name="description"
+                      className="input-border small-font"
+                      value={hotel.description}
+                      onChange={(e) => handleHotelChange(index, e)}
+                      rows={3}
+                      placeholder="Enter description"
+                    />
+                  </Form.Group>
+                </Col>
+                <Col md={3}>
+                  <Button
+                    size="sm"
+                    variant="danger"
+                    className="mt-2"
+                    onClick={() => handleRemoveHotel(index)}
+                  >
+                    <IoCloseOutline size={22} />
+                  </Button>
+                </Col>
+                <hr />
+              </Row>
+            ))}
+          </Container>
 
           <hr className="mt-2 mb-2" />
 

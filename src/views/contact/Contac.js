@@ -146,7 +146,9 @@ function Contac() {
                   ? currentEnquiries.reverse().map((contact, index) => (
                       <tr key={contact.id}>
                         <td className="text-center text-dark">{index + 1 + indexOfFirstItem}</td>
-                        <td className="text-center text-dark">{contact.user.name ?? 'N/A'}</td>
+                        <td className="text-center text-dark">
+                          {contact.user.firstName + " " + contact.user.lastName ?? 'N/A'}
+                        </td>
                         <td className="text-center text-dark">{contact.user.email ?? 'N/A'}</td>
                         <td className="text-center text-dark">{contact.user.phone ?? 'N/A'}</td>
                         <td className="text-center text-dark">{contact.destination ?? 'N/A'}</td>
