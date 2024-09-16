@@ -16,8 +16,8 @@ const AppFooter = () => {
         >
           Design & Developed by
         </span>
-        <a href="https://softseekersinfotech.com/" target="_blank" rel="noopener noreferrer">
-          SoftSeekers Infotech Private Limited
+        <a href="https://connectshiksha.tech/" target="_blank" rel="noopener noreferrer">
+        ConnectShiksha.Tech 
         </a>
       </div>
     </CFooter>
