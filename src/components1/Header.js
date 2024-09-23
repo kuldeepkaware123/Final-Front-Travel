@@ -131,7 +131,7 @@ function Header() {
                         aria-haspopup="true"
                         aria-expanded="false"
                       >
-                        Destinations <i className="icon-arrow-down" aria-hidden="true"></i>
+                        Tour Packages <i className="icon-arrow-down" aria-hidden="true"></i>
                       </Link>
                       <ul className="dropdown-menu">
                         {isLoading && (
@@ -159,7 +159,7 @@ function Header() {
                     </li>
 
                     <li>
-                      <Link to="/hotels">Hotels</Link>
+                      <Link to="/hotels">Places</Link>
                     </li>
                     <li>
                       <Link to="/blogs">Blogs</Link>
