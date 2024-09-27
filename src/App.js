@@ -16,8 +16,8 @@ import './css/bootstrap.min.css'
 import './css/style.css'
 import './css/plugin.css'
 import './fonts/line-icons.css'
-import { MyToken } from './MyAPI.js'
-import EnquiryForm from './pages/EnquiryForm.js'
+
+
 
 // Containers
 const DefaultLayout = React.lazy(() => import('./layout/DefaultLayout'))
@@ -31,13 +31,13 @@ const ExploreIndia = React.lazy(() => import('./pages/ExploreIndia.js'))
 const AboutPage = React.lazy(() => import('./pages/AboutPage.js'))
 const BlogsPage = React.lazy(() => import('./pages/BlogsPage.js'))
 const BlogDetails = React.lazy(() => import('./pages/BlogDetails.js'))
-const HotelDetails = React.lazy(() => import('./pages/HotelDetails.js'))
+const Placedetails = React.lazy(() => import('./pages/Placedetails.js'))
 const TourPackage = React.lazy(() => import('./pages/TourPackage.js'))
 const PackageDynamic = React.lazy(() => import('./pages/PackageDynamic.js'))
 const PackageDynamicPrivate = React.lazy(() => import('./pages/PackageDynamicPrivate.js'))
 const CarRentel = React.lazy(() => import('./pages/CarRentel.js'))
 const HotDeals = React.lazy(() => import('./pages/HotDeals.js'))
-const Hotels = React.lazy(() => import('./pages/Hotels.js'))
+const Places = React.lazy(() => import('./pages/Places.js'))
 const LogIn = React.lazy(() => import('./pages/LogIn.js'))
 const SignUP = React.lazy(() => import('./pages/SignUP.js'))
 const Register = React.lazy(() => import('./views/pages/register/Register'))
@@ -51,6 +51,8 @@ const PaymentsPage = React.lazy(() => import('./pages/PaymentsPage.js'))
 const ShippingAndDeliveryPage = React.lazy(() => import('./pages/ShippingAndDeliveryPage.js'))
 const RaiseEnquiry = React.lazy(() => import('./pages/RaiseEnquiry.js'))
 const CheckOut = React.lazy(() => import('./pages/CheckOut.js'))
+const HotelPackage = React.lazy(() => import('./pages/HotelPackage.js'))
+const HotelPackageDynamic = React.lazy(() => import('./pages/HotelPackageDynamic.js'))
 
 const App = () => {
   const { isColorModeSet, setColorMode } = useColorModes('coreui-free-react-admin-template-theme')
@@ -89,13 +91,16 @@ const App = () => {
           <Route path="/blogs" element={<BlogsPage />} />
           <Route path="/user/checkout/" element={<CheckOut />} />
           <Route path="/blog/:id" element={<BlogDetails />} />
-          <Route path="/hotel/:id" element={<HotelDetails />} />
+          <Route path="/place/:id" element={<Placedetails />} />
           <Route path="/:id" element={<TourPackage />} />
           <Route path="/package/:id" element={<PackageDynamic />} />
           <Route path="/package/private/:enquiryId/:id" element={<PackageDynamicPrivate />} />
+          <Route path="/hotel/:id" element={<HotelPackage />} />
+          <Route path="/hotel/package/:id" element={<HotelPackageDynamic />} />
+
           <Route path="/book/car" element={<CarRentel />} />
           <Route path="/hot/deals" element={<HotDeals />} />
-          <Route path="/hotels" element={<Hotels />} />
+          <Route path="/places" element={<Places />} />
           <Route path="/login" element={<LogIn />} />
           <Route path="/signup" element={<SignUP />} />
           <Route path="/explore/india" element={<ExploreIndia />} />

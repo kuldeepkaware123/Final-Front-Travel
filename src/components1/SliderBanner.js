@@ -36,7 +36,7 @@ function SliderBanner() {
   }, [])
   return (
     <div className="container mt-3 px-3 SliderBanner-1 position-relative">
-      <button
+      {/* <button
         className="custom-prev-slide position-absolute top-50 translate-middle-y d-none d-md-block"
         style={{
           zIndex: '142512001',
@@ -59,7 +59,7 @@ function SliderBanner() {
         }}
       >
         <GrFormNext size={22} color="#fff" />
-      </button>
+      </button> */}
       <Swiper
         pagination={{
           clickable: true,

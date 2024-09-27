@@ -2,10 +2,6 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
 import React, { useEffect, useState } from 'react'
 import { Navigation, Pagination, Scrollbar, A11y, Autoplay } from 'swiper/modules'
-import img1 from '../images/trending/trending2.jpg'
-import img2 from '../images/trending/trending3.jpg'
-import img3 from '../images/trending/trending4.jpg'
-import img4 from '../images/trending/trending1.jpg'
 import { Swiper, SwiperSlide, useSwiper } from 'swiper/react'
 import { MyAPI, MyError, truncateText } from '../MyAPI'
 import { Link } from 'react-router-dom'
@@ -78,7 +74,7 @@ function BestTour() {
                         <div className="trend-item rounded box-shadow">
                           <div className="trend-image position-relative">
                             <img
-                              style={{ maxHeight: '60vh', height: '60vh' }}
+                              style={{ maxHeight: '60vh', height: '40vh' }}
                               src={item.galleryImages[0] || item.galleryImages[1]}
                               alt="image"
                               className=""
@@ -94,10 +90,8 @@ function BestTour() {
                                 </span>
                               </div>
                             </div>
-                            <h5 className="theme mb-1">
-                              <i className="flaticon-location-pin"></i> Croatia
-                            </h5>
-                            <h3 className="mb-1">
+                         
+                            <h3 className="my-1">
                               <Link to={`/package/${item._id}`}>{item.title}</Link>
                             </h3>
                             <p className=" border-b pb-1">{truncateText(item.description, 15)}</p>

@@ -33,7 +33,7 @@ import { IoClose } from 'react-icons/io5'
 import ItenaryPage from '../components1/ItenaryPage'
 import RecmmendedHotels from '../components1/RecmmendedHotels'
 
-function PackageDynamic() {
+function HotelPackageDynamic() {
   const [packageData, setPackageData] = useState(null)
   const [allReview, setAllReview] = useState([])
   const userId = useSelector((state) => state.userId)
@@ -439,18 +439,7 @@ function PackageDynamic() {
                       >
                         Overview
                       </Button>
-                      <Button
-                        className={`outline-none`}
-                        style={{
-                          background: activeTab === 'trip-outline' ? '#244855' : 'transparent',
-                          color: activeTab === 'trip-outline' ? '#fff' : '#244855',
-                          borderColor: '#244855',
-                          whiteSpace: 'nowrap',
-                        }}
-                        onClick={() => handleTabClick('trip-outline')}
-                      >
-                        Trip Outline
-                      </Button>
+                     
                       <Button
                         className={`outline-none`}
                         style={{
@@ -461,20 +450,9 @@ function PackageDynamic() {
                         }}
                         onClick={() => handleTabClick('trip-includes')}
                       >
-                        Trip Includes
+                        Hotels Includes
                       </Button>
-                      <Button
-                        className={`outline-none`}
-                        style={{
-                          background: activeTab === 'trip-excludes' ? '#244855' : 'transparent',
-                          color: activeTab === 'trip-excludes' ? '#fff' : '#244855',
-                          borderColor: '#244855',
-                          whiteSpace: 'nowrap',
-                        }}
-                        onClick={() => handleTabClick('trip-excludes')}
-                      >
-                        Trip Excludes
-                      </Button>
+                     
                       <Button
                         className={`outline-none`}
                         style={{
@@ -518,7 +496,7 @@ function PackageDynamic() {
                       {activeTab === 'overview' && (
                         <div>{packageData && packageData.description}</div>
                       )}
-                      {activeTab === 'trip-outline' && (
+                      {/* {activeTab === 'trip-outline' && (
                         <div>
                           {isMobile ? (
                             <Accordion activeKey={activeKey}>
@@ -543,7 +521,7 @@ function PackageDynamic() {
                             <Timeline events={packageData.itineraries} />
                           )}
                         </div>
-                      )}
+                      )} */}
                       {activeTab === 'trip-includes' && (
                         <div>
                           <ul>
@@ -558,21 +536,7 @@ function PackageDynamic() {
                           </ul>
                         </div>
                       )}
-                      {activeTab === 'trip-excludes' && (
-                        <div>
-                          {' '}
-                          <ul>
-                            {packageData &&
-                              packageData.excludes.length > 0 &&
-                              packageData.excludes.map((item, index) => (
-                                <li key={index} className="d-block pb-1">
-                                  <IoClose size={22} color="red" /> &nbsp;
-                                  {item}
-                                </li>
-                              ))}
-                          </ul>
-                        </div>
-                      )}
+                    
                       {activeTab === 'gallery' && (
                         <div className="gallery">
                           {packageData.galleryImages &&
@@ -681,7 +645,9 @@ function PackageDynamic() {
                   </div>
                 </div>
 
-                <div className="col-12 col-lg-4 mt-2  py-3 border-2 rounded-3 shadow-sm ">
+                <div className="col-12 col-lg-4 mt-2  py-3 border-2 rounded-3 shadow-sm "
+                style={{maxHeight:"150px"}}
+                >
                 <p className="text-dark mb-3">
                         From &nbsp;
                         {packageData &&
@@ -746,14 +712,7 @@ function PackageDynamic() {
                       Book Now
                     </Button>
                   )}
-                  <Button
-                    onClick={handleDownload}
-                    disabled={btnLoading}
-                    style={{ background: '#244855', borderColor: '#244855' }}
-                    className="text-truncate"
-                  >
-                    {btnLoading ? <Spinner variant="secondary" size="sm" /> : 'Download Itinerary'}
-                  </Button>
+                 
                   </div>
                 
                 </div>
@@ -783,4 +742,4 @@ function PackageDynamic() {
   )
 }
 
-export default PackageDynamic
+export default HotelPackageDynamic

@@ -60,9 +60,7 @@ const RecmmendedHotels = ({ hotels }) => {
                           <div className="color-overlay"></div>
                         </div>
                         <div className="trend-content p-4 pt-5 position-relative">
-                          <h5 className="theme mb-1">
-                            <i className="flaticon-location-pin"></i> Croatia
-                          </h5>
+                          
                           <h3 className="mb-1">
                             <Link to={`/hotel/${item?._id}`}>{item?.title}</Link>
                           </h3>

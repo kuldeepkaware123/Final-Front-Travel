@@ -122,13 +122,19 @@ function BlogDetails() {
     <>
       <Header />
 
-      <div className="page-cover pt-10 pb-10 bg-lgrey border-b">
+      <div className="page-cover pt-5  bg-lgrey border-b">
         <div className="container">
           <div className="row align-items-center">
-            <div className="col-lg-6 mb-4">
+          <div className="col-12 mb-4">
+              <div className="box-shadow  overflow-hidden position-relative">
+                <img src={blog && blog.coverImage} alt="Image" className="w-100 rounded"
+                style={{height: '500px', objectFit: 'cover'}} 
+                />
+              </div>
+            </div>
+            <div className="col-12 ">
               <div className="cover-content text-center text-md-start">
-
-                <h1 className="lh-sm">{blog && blog.title}</h1>
+                <h1 className="lh-sm fs-1">{blog && blog.title}</h1>
                 <div className="author-detail d-flex align-items-center">
                   <span className="me-3">
                     <Link to="#">
@@ -140,29 +146,17 @@ function BlogDetails() {
                 </div>
               </div>
             </div>
-            <div className="col-lg-6 mb-4">
-              <div className="box-shadow p-3 position-relative">
-                <img src={blog && blog.coverImage} alt="Image" className="w-100 rounded" />
-              </div>
-            </div>
+           
           </div>
         </div>
       </div>
 
-      <section className="blog blog-left pt-10">
+      <section className="blog ">
         <div className="container">
           <div className="row">
             <div className=" col-md-12 col-sm-12">
               <div className="blog-single">
                 <div className="blog-single-in d-md-flex align-items-center mb-4 text-center text-md-start">
-                  {/* <div className="blog-date me-4">
-                    <div className="date text-center bg-theme p-5 py-4 rounded">
-                      <h2 className="day mb-0 white">{blog && formatDate(blog.createdAt, 'dd')}</h2>
-                      <div className="month white">
-                        {blog && formatDate(blog.createdAt, 'month')}
-                      </div>
-                    </div>
-                  </div> */}
                   <div className="blog-single-in-cont w-75">
                     <div className="blog-content">
                       <h2 className="blog-title mb-0">
@@ -181,23 +175,7 @@ function BlogDetails() {
                   </div>
 
 
-
-                  <div className="blog-imagelist mb-4">
-                    <div className="row">
-                      {blog &&
-                        blog.otherImages.map((image, index) => (
-                          <div
-                            className={
-                              blog.otherImages.length === 1
-                                ? 'col-md-12 col-sm-12 col-xs-12 mt-4'
-                                : 'col-md-6 col-sm-6 col-xs-12 mt-4'
-                            }
-                          >
-                            <img src={image} alt="image" className="rounded" />
-                          </div>
-                        ))}
-                    </div>
-                  </div>
+                  {/* <!-- blog image --> */}
 
                   <p className="mb-4">
                     <div

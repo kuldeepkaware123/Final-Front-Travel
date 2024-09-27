@@ -1,12 +1,13 @@
 /* eslint-disable react/jsx-key */
 import React, { useEffect, useState } from 'react'
 
-
+import logo from "../assets/Logo/logo.png"
 import { Link, useNavigate } from 'react-router-dom'
 import { IoCallOutline } from 'react-icons/io5'
 import { MyAPI, MyError, MyToken } from '../MyAPI'
 import { Spinner } from 'react-bootstrap'
-function Header() {
+function 
+Header() {
   const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false)
   const [isUser, setIsUser] = useState(false)
@@ -97,16 +98,15 @@ function Header() {
                 {/* <!-- Brand and toggle get grouped for better mobile display --> */}
                 <div className="navbar-header d-flex align-items-center justify-content-between ">
                   <Link className="navbar-brand" href="/">
-                    <h1 className='fs-4 mt-1'>Purulia Travels </h1>
-                    {/* <img
+                    <img
                       style={{
-                        width: '45px',
+                        width: '100px',
                         height: 'auto',
                         objectFit: 'contain',
                       }}
                       src={logo}
                       alt="image"
-                    /> */}
+                    />
                   </Link>
                 </div>
                 {/* <!-- Collect the nav links, forms, and other content for toggling --> */}
@@ -157,9 +157,45 @@ function Header() {
                         )}
                       </ul>
                     </li>
+                    <li className="submenu dropdown">
+                      <Link
+                        to="#"
+                        className="dropdown-toggle"
+                        data-toggle="dropdown"
+                        role="button"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                      >
+                        Hotels <i className="icon-arrow-down" aria-hidden="true"></i>
+                      </Link>
+                      <ul className="dropdown-menu">
+                        {isLoading && (
+                          <li className="d-flex align-items-center justify-content-center py-1">
+                            <Spinner size="sm" animation="border" color="blue" role="status">
+                              <span className="visually-hidden">Loading...</span>
+                            </Spinner>
+                          </li>
+                        )}
+                        {AllDestinations &&
+                          AllDestinations.length > 0 &&
+                          AllDestinations.map(
+                            (item, index) =>
+                              item.packages &&
+                              item.packages.length > 0 && (
+                                <li key={index}>
+                                  <Link to={`/hotel/${item._id}`}>{item.name}</Link>
+                                </li>
+                              ),
+                          )}
+                        {AllDestinations && !isLoading && AllDestinations.length === 0 && (
+                          <li>Description Not Found</li>
+                        )}
+                      </ul>
+                    </li>
 
+                  
                     <li>
-                      <Link to="/hotels">Places</Link>
+                      <Link to="/places">Places</Link>
                     </li>
                     <li>
                       <Link to="/blogs">Blogs</Link>
@@ -274,9 +310,7 @@ function Header() {
                       </ul>
                     </li>
 
-                    <li>
-                      <Link to="/hot/deals">Hotels</Link>
-                    </li>
+                 
                     <li>
                       <Link to="/blogs">Blogs</Link>
                     </li>

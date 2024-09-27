@@ -4,10 +4,9 @@ import { Link } from 'react-router-dom'
 import Footer from '../components1/Footer'
 import WhatsAppHelp from '../components1/WhatsAppHelp'
 import { MyAPI, MyError } from '../MyAPI'
-import EnquiryButton from '../components1/EnquiryButton'
-import EnquiryForm from './EnquiryForm'
 
-const Hotels = () => {
+
+const Places = () => {
   const [hotels, setHotels] = useState([])
 
   const fetchHotels = async () => {
@@ -157,12 +156,12 @@ const Hotels = () => {
                           <div className="trend-content-main p-4 pb-2">
                             <div className="trend-content">
                               <h4>
-                                <Link to={`/hotel/${hotel._id}`}>{hotel.title ?? ''}</Link>
+                                <Link to={`/place/${hotel._id}`}>{hotel.title ?? ''}</Link>
                               </h4>
                               <p className="mb-3">{truncateText(hotel.description ?? '', 30)}</p>
                               <div className="entry-meta d-flex align-items-center justify-content-between">
                                 <div className="entry-button d-flex align-items-center mb-2">
-                                  <Link to={`/hotel/${hotel._id}`} className="nir-btn">
+                                  <Link to={`/place/${hotel._id}`} className="nir-btn">
                                     Read More
                                   </Link>
                                 </div>
@@ -186,4 +185,4 @@ const Hotels = () => {
   )
 }
 
-export default Hotels
+export default Places
