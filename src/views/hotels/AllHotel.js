@@ -20,7 +20,7 @@ const AllHotel = () => {
     try {
       let res = await MyAPI.GET(`/hotel`, token)
       let { success, message, error, data } = res.data || res
-      console.log(res.data)
+      // console.log(res.data)
 
       if (success) {
         setHotels(data)

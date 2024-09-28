@@ -1,33 +1,15 @@
 import React from 'react'
 import CIcon from '@coreui/icons-react'
 import { HiMiniUsers } from 'react-icons/hi2'
-import { FaBoxesPacking, FaHotel, FaTruckMoving } from 'react-icons/fa6'
-import { FaBoxOpen, FaCar } from 'react-icons/fa'
-import { FaServer } from 'react-icons/fa'
-import { TbPackages } from 'react-icons/tb'
-import { MdConnectWithoutContact, MdOutlineReviews, MdWeb } from 'react-icons/md'
-import { GiWindyStripes } from 'react-icons/gi'
+import { FaBoxesPacking, FaHotel } from 'react-icons/fa6'
+import { MdConnectWithoutContact, MdWeb } from 'react-icons/md'
 import { IoCallOutline, IoHome } from 'react-icons/io5'
-import { BiTrip } from 'react-icons/bi'
 import { RiCoupon2Fill } from 'react-icons/ri'
 import { BiSolidOffer } from 'react-icons/bi'
 import { CgWebsite } from 'react-icons/cg'
 
-import {
-  cilBell,
-  cilCalculator,
-  cilChartPie,
-  cilCursor,
-  cilDescription,
-  cilDrop,
-  cilNotes,
-  cilPencil,
-  cilPuzzle,
-  cilSpeedometer,
-  cilStar,
-  cilUserPlus,
-} from '@coreui/icons'
-import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
+import { cilSpeedometer, cilUserPlus } from '@coreui/icons'
+import { CNavGroup, CNavItem } from '@coreui/react'
 
 const _new_nav = [
   {
@@ -81,36 +63,9 @@ const _new_nav = [
         name: 'All Packages',
         to: '/admin/packages/all',
       },
-      {
-        component: CNavItem,
-        name: 'Trip Type',
-        to: '/admin/trip-type',
-      },
-      {
-        component: CNavItem,
-        name: 'Destinations',
-        to: '/admin/destinations',
-      },
     ],
   },
-  // {
-  //   component: CNavGroup,
-  //   name: 'Car',
-  //   to: '/base',
-  //   icon: <FaCar size={22} icon={cilUserPlus} customClassName="nav-icon" />,
-  //   items: [
-  //     {
-  //       component: CNavItem,
-  //       name: 'Add Car',
-  //       to: '/admin/car/add',
-  //     },
-  //     {
-  //       component: CNavItem,
-  //       name: 'All Cars',
-  //       to: '/admin/car/all',
-  //     },
-  //   ],
-  // },
+
   {
     component: CNavGroup,
     name: 'Hotels',
@@ -126,6 +81,24 @@ const _new_nav = [
         component: CNavItem,
         name: 'All Hotels',
         to: '/admin/hotels/all',
+      },
+    ],
+  },
+  {
+    component: CNavGroup,
+    name: 'Trips & Destinations',
+    to: '/base',
+    icon: <FaBoxesPacking size={22} icon={cilUserPlus} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Trip Type',
+        to: '/admin/trip-type',
+      },
+      {
+        component: CNavItem,
+        name: 'Destinations',
+        to: '/admin/destinations',
       },
     ],
   },
@@ -222,11 +195,6 @@ const _new_nav = [
         name: 'Banners',
         to: '/admin/banner',
       },
-      // {
-      //   component: CNavItem,
-      //   name: 'Rajasthan',
-      //   to: '/admin/rajasthan',
-      // },
       {
         component: CNavItem,
         name: 'Best Tour',

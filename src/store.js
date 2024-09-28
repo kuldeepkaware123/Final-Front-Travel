@@ -11,7 +11,9 @@ const initialState = {
   admin: null,
   uploadImages: null,
   addPackage: {},
+  addHotel: {},
   updatePackage: {},
+  updateHotel: {},
   booking: {},
   isEnquiryVisible: false,
   isActiveLastThree: false,
@@ -31,8 +33,12 @@ const changeState = (state = initialState, action) => {
       return { ...state, uploadImages: action.payload }
     case 'SET_PACKAGE_DATA':
       return { ...state, addPackage: { ...state.addPackage, ...action.payload } }
+    case 'SET_HOTEL_DATA':
+      return { ...state, addHotel: { ...state.addHotel, ...action.payload } }
     case 'SET_UPDATE_PACKAGE_DATA':
       return { ...state, updatePackage: { ...state.updatePackage, ...action.payload } }
+    case 'SET_UPDATE_HOTEL_DATA':
+      return { ...state, updateHotel: { ...state.updateHotel, ...action.payload } }
     case 'SET_BOOKING_DATA':
       return { ...state, booking: { ...state.booking, ...action.payload } }
     case 'SET_USER_ID':
@@ -84,8 +90,20 @@ export const setPackageData = (data) => ({
 })
 
 // Action creator for updating addPackage data
+export const setHotelData = (data) => ({
+  type: 'SET_HOTEL_DATA',
+  payload: data,
+})
+
+// Action creator for updating addPackage data
 export const setUpdatePackageData = (data) => ({
   type: 'SET_UPDATE_PACKAGE_DATA',
+  payload: data,
+})
+
+// Action creator for updating addPackage data
+export const setUpdateHotelData = (data) => ({
+  type: 'SET_UPDATE_HOTEL_DATA',
   payload: data,
 })
 

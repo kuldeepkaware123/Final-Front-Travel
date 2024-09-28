@@ -1,29 +1,10 @@
 import React from 'react'
 import CIcon from '@coreui/icons-react'
-import { HiMiniUsers } from 'react-icons/hi2'
-import { FaBoxesPacking, FaTruckMoving } from 'react-icons/fa6'
-import { FaBoxOpen, FaCar, FaSwatchbook } from 'react-icons/fa'
-import { FaServer } from 'react-icons/fa'
-import { TbPackages, TbProgressHelp } from 'react-icons/tb'
+import { FaSwatchbook } from 'react-icons/fa'
 import { CgProfile } from 'react-icons/cg'
-import { VscGitPullRequestCreate } from 'react-icons/vsc'
 
-import {
-  cilBell,
-  cilCalculator,
-  cilChartPie,
-  cilCursor,
-  cilDescription,
-  cilDrop,
-  cilNotes,
-  cilPencil,
-  cilPuzzle,
-  cilSpeedometer,
-  cilStar,
-  cilUserPlus,
-} from '@coreui/icons'
-import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
-import { IoHome } from 'react-icons/io5'
+import { cilSpeedometer } from '@coreui/icons'
+import { CNavItem } from '@coreui/react'
 
 const _user_nav = [
   // {

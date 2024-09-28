@@ -1,11 +1,10 @@
 import axios from 'axios'
 import { toast } from 'react-toastify'
 
-// const baseUrl = 'http://localhost:8080/api'
 export const RZ_API_KEY = 'rzp_test_ndeT7XXWVEnCM1'
 export const RZ_API_SECRET = '6AfAVwubebNi8rMLO5lbpeuh'
-const baseUrl = 'https://purulia-backend.onrender.com/api'
-// const baseUrl = 'https://rajputana-routes-backend.onrender.com/api'
+const baseUrl = 'http://localhost:8080/api'
+// const baseUrl = 'https://purulia-backend.onrender.com/api'
 
 export const MyAPI = {
   GET: async (url, token = null) => {

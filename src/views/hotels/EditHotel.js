@@ -1,266 +1,755 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Col, Form, Row, Spinner } from 'react-bootstrap'
-import Zoom from 'react-medium-image-zoom'
-import 'react-medium-image-zoom/dist/styles.css'
+import { Button, Col, Container, DropdownButton, Form, Image, Row, Spinner } from 'react-bootstrap'
+import { IoMdClose } from 'react-icons/io'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import Editor from 'react-simple-wysiwyg'
+import { IoAdd } from 'react-icons/io5'
+import ImageUploader from '../Packages/ImageUploader'
 import { MyAPI, MyError } from '../../MyAPI'
-import { useSelector } from 'react-redux'
-import { useNavigate, useParams } from 'react-router-dom'
-import ReactQuill from 'react-quill'
-import 'react-quill/dist/quill.snow.css'
-
+import { useDispatch, useSelector } from 'react-redux'
+import { setHotelData, setUpdateHotelData } from '../../store'
 
 const EditHotel = () => {
-    const token = useSelector((state) => state.token)
-    const navigate = useNavigate()
-    const { id } = useParams()
-  
-    const [hotelTitle, setHotelTitle] = useState('')
-    const [hotelSubTitle, setHotelSubTitle] = useState('')
-    const [hotelContent, setHotelContent] = useState('')
-    const [hotelDescription, setHotelDescription] = useState('')
-    const [hotelImage, setHotelImage] = useState(null)
-    const [hotelImageBackground, setHotelImageBackground] = useState(null)
-    const [hotelImageOther, setHotelImageOther] = useState(null)
-  
-    const [hotelData, setHotelData] = useState(null)
-    const [ishotelImageUpdate, setIshotelImageUpdate] = useState(false)
-    const [ishotelImageBackgroundUpdate, setIshotelImageBackgroundUpdate] = useState(false)
-    const [ishotelImageOtherUpdate, setIshotelImageOtherUpdate] = useState(false)
-    const [loading, setLoading] = useState(false) // Loading state
-  
-    const fetchHotelData = async (id) => {
+  const location = useLocation()
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const { id } = useParams()
+  const [loading, setLoading] = useState(false)
+
+  const [serverHotel, setServerHotel] = useState(null)
+
+  const fetchHotelById = async (id) => {
+    try {
       setLoading(true)
-      try {
-        let res = await MyAPI.GET(`/hotel/${id}`, token)
-        let { message, error, success, data } = res.data || res
-        if (success) {
-          setHotelData(data)
-          setHotelTitle(data.title)
-          setHotelSubTitle(data.subTitle)
-          setHotelContent(data.html)
-          setHotelDescription(data.description)
-        } else {
-          MyError.error(message || error || 'Server Error Please try again later')
-        }
-      } catch (error) {
-        MyError.error(error.message)
-      } finally {
-        setLoading(false)
+      let res = await MyAPI.GET(`/hotel/${id}`, token)
+
+      let { success, message, error, data } = res.data || res
+      setLoading(false)
+      setServerHotel(data)
+      if (success) {
+      } else {
+        MyError.error(message || error || 'Api Error.')
       }
+    } catch (error) {
+      setLoading(false)
+      MyError.error(error.message)
     }
-  
-    useEffect(() => {
-      fetchHotelData(id)
-    }, [id])
-  
-    const handleUpdateBHotel = async () => {
-      if (!hotelTitle) {
-        return MyError.warn('Hotel Title is required')
+  }
+
+  useEffect(() => {
+    fetchHotelById(id)
+  }, [id])
+
+  const [priceIncludes, setPriceIncludes] = useState([''])
+
+  const handlepriceIncludesAddItem = () => {
+    setPriceIncludes([...priceIncludes, ''])
+  }
+
+  const handlepriceIncludesChange = (index, event) => {
+    const newPriceIncludes = [...priceIncludes]
+    newPriceIncludes[index] = event.target.value
+    setPriceIncludes(newPriceIncludes)
+  }
+
+  const handlepriceIncludesRemoveItem = (index) => {
+    const newPriceIncludes = [...priceIncludes]
+    newPriceIncludes.splice(index, 1)
+    setPriceIncludes(newPriceIncludes)
+  }
+
+  const [priceExcludes, setPriceExcludes] = useState([''])
+
+  const handlePriceExcludesAddItem = () => {
+    setPriceExcludes([...priceExcludes, ''])
+  }
+
+  const handlePriceExcludesChange = (index, event) => {
+    const newPriceExcludes = [...priceExcludes]
+    newPriceExcludes[index] = event.target.value
+    setPriceExcludes(newPriceExcludes)
+  }
+
+  const handlePriceExcludesRemoveItem = (index) => {
+    const newPriceExcludes = [...priceExcludes]
+    newPriceExcludes.splice(index, 1)
+    setPriceExcludes(newPriceExcludes)
+  }
+
+  useEffect(() => {
+    if (serverHotel) {
+      let data = {
+        title: serverHotel.title,
+        days: serverHotel.days,
+        nights: serverHotel.nights,
+        description: serverHotel.description,
+        destination: serverHotel.destination,
+        images: serverHotel.galleryImages,
+        status: serverHotel.status,
+        paymentTerm: serverHotel.paymentTerms,
+        faqDetails: serverHotel.faqs,
+        travelEsen: serverHotel.travelEssentials,
+        termConditions: serverHotel.termsAndConditions,
+        priceIncludes: serverHotel.includes,
+        priceExcludes: serverHotel.excludes,
+        tripType: serverHotel.tripType,
       }
-      if (!hotelSubTitle) {
-        return MyError.warn('Hotel Sub Title is required')
-      }
-      if (!hotelContent) {
-        return MyError.warn('Hotel Content is required')
-      }
-      if (!hotelDescription) {
-        return MyError.warn('Hotel Description is required')
-      }
-      if (ishotelImageOtherUpdate && (!hotelImageOther || hotelImageOther.length === 0)) {
-        return MyError.warn('Hotel Image Other is required')
-      }
-  
+
+      dispatch(setUpdateHotelData(data))
+    }
+  }, [serverHotel])
+
+  const token = useSelector((state) => state.token)
+  const storeUploadImages = useSelector((state) => state.uploadImages)
+  const [currentStep, setcurrentStep] = useState('1')
+
+  const [faqDetails, setFaqDetails] = useState('')
+  const [paymentTerm, setPaymentTerm] = useState('')
+  const [termConditions, setTermConditions] = useState('')
+  const [travelEsen, setTravelEsen] = useState('')
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [currentStep])
+
+  //hotel logic
+  const [numDays, setNumDays] = useState(1)
+  const [numNights, setNumNights] = useState(1)
+
+  // variables
+  const [title, setTitle] = useState('')
+  const [description, setDescription] = useState('')
+
+  //image uploader
+  const [isSwitchOn, setIsSwitchOn] = useState(false)
+  const handleSwitchChange = () => {
+    setIsSwitchOn(!isSwitchOn)
+  }
+
+  const [AllTripType, setAllTripType] = useState([])
+  const [AllTripTypeSelected, setAllTripTypeSelected] = useState([])
+  const [AllDestinations, setAllDestinations] = useState([])
+  const [AllDestinationsSelected, setAllDestinationsSelected] = useState([])
+
+  const fetchTripType = async () => {
+    try {
       setLoading(true)
-      try {
-        const formData = new FormData()
-        formData.append('title', hotelTitle)
-        formData.append('subTitle', hotelSubTitle)
-        formData.append('html', hotelContent)
-        formData.append('description', hotelDescription)
-        if (ishotelImageBackgroundUpdate) {
-          formData.append('backgroundImage', hotelImageBackground)
-        }
-        if (ishotelImageOtherUpdate && hotelImageOther && hotelImageOther.length > 0) {
-          hotelImageOther.forEach((item) => {
-            formData.append('otherImages', item)
-          })
-        }
-  
-        let res = await MyAPI.PUT(`/hotel/${id}`, formData, token)
-        let { success, message, error } = res.data || res
-        if (success) {
-          fetchHotelData(id)
-          MyError.success(message)
-        } else {
-          MyError.error(message || error || 'Server Error Please try again later.')
-        }
-      } catch (error) {
-        MyError.error(error.message)
-      } finally {
-        setLoading(false)
+      let res = await MyAPI.GET('/tripType', token)
+      let { success, message, error, tripType } = res.data || res
+      setLoading(false)
+      if (success) {
+        setAllTripType(tripType)
+      } else {
+        MyError.error(message || error || 'Server Error...')
       }
+    } catch (error) {
+      setLoading(false)
+      MyError.error(error.message)
     }
-  
-    const modules = {
-      toolbar: [
-        [{ header: '1' }, { header: '2' }, { font: [] }],
-        [{ size: [] }],
-        ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-        [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
-        ['link', 'image', 'video'],
-        ['clean'],
-      ],
+  }
+
+  const fetchDestinations = async () => {
+    try {
+      setLoading(true)
+      let res = await MyAPI.GET('/destination', token)
+      let { success, message, error, destination } = res.data || res
+
+      setLoading(false)
+      if (success) {
+        setAllDestinations(destination)
+      } else {
+        MyError.error(message || error || 'Server Error...')
+      }
+    } catch (error) {
+      setLoading(false)
+      MyError.error(error.message)
     }
-  
-    const formats = [
-      'header',
-      'font',
-      'size',
-      'bold',
-      'italic',
-      'underline',
-      'strike',
-      'blockquote',
-      'list',
-      'bullet',
-      'indent',
-      'link',
-      'image',
-      'video',
-    ]
+  }
+
+  const handleCheckboxChange = (item) => {
+    if (AllTripTypeSelected.includes(item)) {
+      setAllTripTypeSelected(AllTripTypeSelected.filter((tripType) => tripType !== item))
+    } else {
+      setAllTripTypeSelected([...AllTripTypeSelected, item])
+    }
+    // console.log(AllTripTypeSelected)
+  }
+  const handleDestinationsChange = (item) => {
+    if (AllDestinationsSelected.includes(item)) {
+      setAllDestinationsSelected(AllDestinationsSelected.filter((tripType) => tripType !== item))
+    } else {
+      setAllDestinationsSelected([...AllDestinationsSelected, item])
+    }
+  }
+
+  useEffect(() => {
+    fetchTripType()
+    fetchDestinations()
+  }, [])
+
+  const Step1Validate = () => {
+    if (!title) {
+      MyError.warn('Please Enter Title')
+      return
+    }
+
+    if (!AllDestinationsSelected || AllDestinationsSelected.length === 0) {
+      MyError.warn('Please Select Destination')
+      return
+    }
+
+    if (!AllTripTypeSelected || AllTripTypeSelected.length === 0) {
+      MyError.warn('Please Select Trip Type')
+      return
+    }
+
+    if (!description) {
+      MyError.warn('Please Enter Description')
+      return
+    }
+
+    if (isSwitchOn && (!storeUploadImages || storeUploadImages.length === 0)) {
+      MyError.warn('Please Upload Images')
+      return
+    }
+
+    dispatch(
+      setHotelData({
+        title,
+        destination: AllDestinationsSelected,
+        tripType: AllTripTypeSelected,
+        description,
+      }),
+    )
+
+    setcurrentStep('2')
+  }
+
+  const Step2Validate = () => {
+    dispatch(
+      setHotelData({
+        days: numDays,
+        nights: numNights,
+        priceIncludes,
+        priceExcludes,
+      }),
+    )
+
+    setcurrentStep('3')
+  }
+
+  const Step3Validate = () => {
+    dispatch(
+      setHotelData({
+        travelEsen,
+        faqDetails,
+        termConditions,
+        paymentTerm,
+      }),
+    )
+    addHotelToApi(travelEsen, faqDetails, termConditions, paymentTerm)
+  }
+
+  const hotelData = useSelector((state) => state.addHotel)
+  const storeUpdatePackageData = useSelector((state) => state.updateHotel)
+
+  useEffect(() => {
+    if (storeUpdatePackageData) {
+      setTitle(storeUpdatePackageData?.title)
+      setDescription(storeUpdatePackageData?.description)
+      // setDestination(storeUpdatePackageData.destination)
+      setNumDays(storeUpdatePackageData.days)
+      setNumNights(storeUpdatePackageData.nights)
+
+      var all_destination = []
+      storeUpdatePackageData?.destination?.forEach((item) => {
+        all_destination.push(item)
+      })
+      setAllDestinationsSelected(all_destination)
+
+      var all_trip_type = []
+      storeUpdatePackageData?.tripType?.forEach((item) => {
+        all_trip_type.push(item)
+      })
+      setAllTripTypeSelected(all_trip_type)
+
+      setPriceIncludes(storeUpdatePackageData.priceIncludes)
+      setPriceExcludes(storeUpdatePackageData.priceExcludes)
+
+      setTravelEsen(storeUpdatePackageData.travelEsen)
+      setFaqDetails(storeUpdatePackageData.faqDetails)
+      setTermConditions(storeUpdatePackageData.termConditions)
+      setPaymentTerm(storeUpdatePackageData.paymentTerm)
+    }
+
+    // console.log('storeUpdatePackageData', storeUpdatePackageData)
+  }, [storeUpdatePackageData])
+
+  const [showTravelEssentials, setShowTravelEssentials] = useState(true)
+  const [showFAQs, setShowFAQs] = useState(true)
+  const [showTermsConditions, setShowTermsConditions] = useState(true)
+  const [showPaymentTerms, setShowPaymentTerms] = useState(true)
+
+  const addHotelToApi = async (travelEsen, faqDetails, termConditions, paymentTerm) => {
+    const formData = new FormData()
+    formData.append('title', hotelData.title)
+    formData.append('description', hotelData.description)
+    formData.append('days', hotelData.days)
+    formData.append('nights', hotelData.nights)
+
+    AllDestinationsSelected.forEach((item, index) => {
+      formData.append(`destination[${index}]`, item)
+    })
+
+    AllTripTypeSelected.forEach((item, index) => {
+      formData.append(`tripType[${index}]`, item)
+    })
+
+    if (storeUploadImages && storeUploadImages.length > 0) {
+      storeUploadImages.forEach((image, index) => {
+        formData.append('galleryImages', image)
+      })
+    }
+
+    priceIncludes.forEach((item, index) => {
+      formData.append(`includes[${index}]`, item)
+    })
+
+    priceExcludes.forEach((item, index) => {
+      formData.append(`excludes[${index}]`, item)
+    })
+
+    if (showTravelEssentials) {
+      formData.append('travelEssentials', travelEsen)
+    } else {
+      formData.append('travelEssentials', '<br>')
+    }
+
+    if (showFAQs) {
+      formData.append('faqs', faqDetails)
+    } else {
+      formData.append('faqs', '<br>')
+    }
+
+    if (showPaymentTerms) {
+      formData.append('paymentTerms', paymentTerm)
+    } else {
+      formData.append('paymentTerms', '<br>')
+    }
+
+    if (showTermsConditions) {
+      formData.append('termsAndConditions', termConditions)
+    } else {
+      formData.append('termsAndConditions', '<br>')
+    }
+
+    // // Log FormData for debugging
+    // for (let [key, value] of formData.entries()) {
+    //   console.log(key, value)
+    // }
+
+    try {
+      setLoading(true)
+      let res = await MyAPI.PUT(`/hotel/${id}`, formData, token)
+      let { success, message, error } = res.data || res
+
+      // console.log(res)
+
+      setLoading(false)
+      if (success) {
+        navigate('/admin/hotels/all')
+
+        MyError.success(message || 'Package Updated successfully')
+      } else {
+        MyError.error(message || error || 'Something wrong...')
+      }
+    } catch (error) {
+      setLoading(false)
+      MyError.error(error.message)
+    }
+  }
+
   return (
     <>
       <center>
-        <h3>Edit Hotel</h3>
+        {' '}
+        <h4 className="poppins">Edit Hotel</h4>{' '}
       </center>
-      <Row>
-        {loading && (
-          <Col md={12} className="text-center">
-            <Spinner animation="border" role="status">
-              <span className="visually-hidden">Loading...</span>
-            </Spinner>
-          </Col>
-        )}
-        <Col md={12} className="mt-3">
-          <Form.Group>
-            <Form.Label>Hotel Title</Form.Label>
-            <Form.Control
-              value={hotelTitle}
-              onChange={(e) => setHotelTitle(e.target.value)}
-              type="text"
-              className="input-border"
-              placeholder="Enter Hotel Title"
-            />
-          </Form.Group>
-        </Col>
-
-        <Col md={12} className="mt-3">
-          <Form.Group>
-            <Form.Label>Hotel Sub Title</Form.Label>
-            <Form.Control
-              value={hotelSubTitle}
-              className="input-border"
-              onChange={(e) => setHotelSubTitle(e.target.value)}
-              type="text"
-              placeholder="Enter Hotel Sub Title"
-            />
-          </Form.Group>
-        </Col>
-
-        <Col md={6} className="mt-3">
-          <Form.Group>
-            <Form.Label>Cover Image</Form.Label>
-            <Form.Check
-              type="switch"
-              id="custom-switch"
-              label="Update Image"
-              checked={ishotelImageUpdate}
-              onChange={() => setIshotelImageUpdate(!ishotelImageUpdate)}
-            />
-            {ishotelImageUpdate && (
-              <Form.Control onChange={(e) => setHotelImage(e.target.files[0])} type="file" />
-            )}
-            {!ishotelImageUpdate && hotelData && hotelData.coverImage && (
-              <Zoom>
-                <img
-                  src={hotelData.coverImage}
-                  alt="Cover"
-                  style={{ width: '100px', height: '100px', cursor: 'pointer' }}
-                />
-              </Zoom>
-            )}
-          </Form.Group>
-        </Col>
-
-        <Col md={6} className="mt-3">
-          <Form.Group>
-            <Form.Label>Other Image</Form.Label>
-            <Form.Check
-              type="switch"
-              id="custom-switch"
-              label="Update Image"
-              checked={ishotelImageOtherUpdate}
-              onChange={() => setIshotelImageOtherUpdate(!ishotelImageOtherUpdate)}
-            />
-            {ishotelImageOtherUpdate && (
+      {currentStep === '1' && (
+        <Row className="mt-3 mb-3">
+          <Col md={6} className="mt-2">
+            <Form.Group>
+              <Form.Label className="small-font">Enter Title</Form.Label>
               <Form.Control
-                multiple
-                onChange={(e) => setHotelImageOther([...e.target.files])}
-                type="file"
+                onChange={(e) => setTitle(e.target.value)}
+                value={title}
+                className="input-border small-font"
+                type="text"
+                placeholder="Enter Title"
               />
-            )}
-            <div className="d-flex align-items-center justify-content-center gap-1">
-              {!ishotelImageOtherUpdate &&
-                hotelData &&
-                hotelData.otherImages.length > 0 &&
-                hotelData.otherImages.map((item, index) => (
-                  <Zoom key={index}>
-                    <img
-                      src={item ?? ''}
-                      alt="Other"
-                      style={{ width: '100px', height: '100px', cursor: 'pointer' }}
+            </Form.Group>
+          </Col>
+          <Col md={3} className="mt-2">
+            <Form.Group className="ps-2" controlId="formSelect">
+              <Form.Label className="small-font">&nbsp;</Form.Label>
+              <DropdownButton id="dropdown-checkbox" title="Select Trip Type" variant="secondary">
+                {AllTripType &&
+                  AllTripType.length > 0 &&
+                  AllTripType.map((item, index) => (
+                    <Form.Check
+                      key={index}
+                      checked={AllTripTypeSelected.includes(item._id)}
+                      onChange={() => handleCheckboxChange(item._id)}
+                      className="ms-2"
+                      type="checkbox"
+                      name="option1"
+                      label={item.name}
                     />
-                  </Zoom>
+                  ))}
+                {AllTripType && AllTripType.length === 0 && 'Trip Type Not found'}
+              </DropdownButton>
+            </Form.Group>
+          </Col>
+          <Col md={3} className="mt-2">
+            <Form.Group className="ps-2" controlId="formSelect">
+              <Form.Label className="small-font">&nbsp;</Form.Label>
+              <DropdownButton
+                id="dropdown-checkbox"
+                title="Select Destinations"
+                variant="secondary"
+              >
+                {AllDestinations &&
+                  AllDestinations.length > 0 &&
+                  AllDestinations.map((item, index) => (
+                    <Form.Check
+                      key={index}
+                      checked={AllDestinationsSelected.includes(item._id)}
+                      onChange={() => handleDestinationsChange(item._id)}
+                      className="ms-2"
+                      type="checkbox"
+                      name="option1"
+                      label={item.name}
+                    />
+                  ))}
+                {AllDestinations && AllDestinations.length === 0 && 'Destination Not found'}
+              </DropdownButton>
+            </Form.Group>
+          </Col>
+          <Col className="mt-2">
+            <Form.Check
+              type="switch"
+              id="custom-switch"
+              label="Show Image Uploader"
+              checked={isSwitchOn}
+              onChange={handleSwitchChange}
+            />
+          </Col>
+          {isSwitchOn ? (
+            <ImageUploader />
+          ) : (
+            <div className="small-images d-flex align-items-center justify-content-start gap-2">
+              {storeUpdatePackageData &&
+                storeUpdatePackageData.images &&
+                storeUpdatePackageData.images.length > 0 &&
+                storeUpdatePackageData.images.map((item, index) => (
+                  <img
+                    src={item}
+                    width="230px"
+                    className="border border-2 rounded-2"
+                    alt="img"
+                    key={index}
+                  />
                 ))}
             </div>
-          </Form.Group>
-        </Col>
+          )}
+          <Col md={12} className="mt-2">
+            <Form.Group>
+              <Form.Label className="small-font">Enter Description</Form.Label>
+              <Form.Control
+                onChange={(e) => setDescription(e.target.value)}
+                value={description}
+                className="input-border small-font"
+                as="textarea"
+                rows={3}
+                placeholder="Enter Description"
+              />
+            </Form.Group>
+          </Col>
+          <Col md={12} className="mt-2">
+            <Button size="sm" onClick={Step1Validate} variant="primary">
+              Next
+            </Button>
+          </Col>
+        </Row>
+      )}
+      {currentStep === '2' && (
+        <Row className="mt-3 mb-3">
+          <hr className="mt-2 mb-2" />
 
-        <Col md={12} className="mt-3">
-          <Form.Group>
-            <Form.Label>Description</Form.Label>
-            <Form.Control
-              value={hotelDescription}
-              onChange={(e) => setHotelDescription(e.target.value)}
-              as="textarea"
-              rows={3}
-              placeholder="Enter Description..."
-            />
-          </Form.Group>
-        </Col>
+          <Col md={6} className="mt-2">
+            <Form.Group>
+              <Form.Label className="small-font">Enter Nights</Form.Label>
+              <Form.Control
+                onChange={(e) => {
+                  const value = e.target.value.trim()
+                  setNumNights(value === '' ? '' : value)
+                }}
+                value={numNights === '' ? '' : numNights}
+                className="input-border"
+                type="number"
+                placeholder="Enter Nights"
+              />
+            </Form.Group>
+          </Col>
+          <Col md={6} className="mt-2">
+            <Form.Group>
+              <Form.Label className="small-font">Enter Days</Form.Label>
+              <Form.Control
+                onChange={(e) => {
+                  const value = e.target.value.trim()
+                  setNumDays(value === '' ? '' : value)
+                }}
+                value={numDays === '' ? '' : numDays}
+                className="input-border"
+                type="number"
+                placeholder="Enter Days"
+              />
+            </Form.Group>
+          </Col>
 
-        <Col md={12} className="mt-3">
-          <ReactQuill
-            value={hotelContent}
-            onChange={(content) => setHotelContent(content)}
-            modules={modules}
-            formats={formats}
-          />
-        </Col>
+          <hr className="mt-2 mb-2" />
 
-        <Col md={12} className="mt-3 mb-3">
-          <Button onClick={handleUpdateBHotel} variant="primary" size="sm" disabled={loading}>
-            {loading ? (
-              <>
-                <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" />
-                <span className="ms-2">Updating...</span>
-              </>
-            ) : (
-              'Update Hotel'
-            )}
-          </Button>
-        </Col>
-      </Row>
+          <Col md={12} className="mt-2">
+            {' '}
+            <h6 className="poppins">Price Includes</h6>{' '}
+          </Col>
+          {priceIncludes.map((priceInclude, index) => (
+            <Row className="mt-2">
+              <Col md={11}>
+                <Form.Group key={index}>
+                  <Form.Control
+                    type="text"
+                    className="input-border small-font"
+                    placeholder="Enter Price Includes"
+                    value={priceInclude}
+                    onChange={(e) => handlepriceIncludesChange(index, e)}
+                  />
+                </Form.Group>
+              </Col>
+              <Col md={1}>
+                <Button
+                  size="sm"
+                  variant="danger"
+                  onClick={() => handlepriceIncludesRemoveItem(index)}
+                >
+                  <IoMdClose size={22} />
+                </Button>
+              </Col>
+            </Row>
+          ))}
+
+          <Col className="mt-2">
+            <Button
+              size="sm"
+              className="text-center"
+              variant="primary"
+              onClick={handlepriceIncludesAddItem}
+            >
+              <IoAdd size={22} /> Add
+            </Button>
+          </Col>
+          <hr className="mt-2 mb-2" />
+          <Col md={12} className="mt-2">
+            <h6 className="poppins">Price Excludes</h6>{' '}
+          </Col>
+          {priceExcludes.map((priceExcludes, index) => (
+            <Row className="mt-2">
+              <Col md={11}>
+                <Form.Group key={index}>
+                  <Form.Control
+                    type="text"
+                    className="input-border small-font"
+                    placeholder="Enter Price Excludes"
+                    value={priceExcludes}
+                    onChange={(e) => handlePriceExcludesChange(index, e)}
+                  />
+                </Form.Group>
+              </Col>
+              <Col md={1}>
+                <Button
+                  size="sm"
+                  variant="danger"
+                  onClick={() => handlePriceExcludesRemoveItem(index)}
+                >
+                  <IoMdClose size={22} />
+                </Button>
+              </Col>
+            </Row>
+          ))}
+
+          <Col className="mt-2">
+            <Button
+              size="sm"
+              className="text-center"
+              variant="primary"
+              onClick={handlePriceExcludesAddItem}
+            >
+              <IoAdd size={22} /> Add
+            </Button>
+          </Col>
+
+          <Col md={12} className="mt-2">
+            <Button
+              size="sm"
+              className="me-2"
+              onClick={() => setcurrentStep('1')}
+              variant="primary"
+            >
+              Previous
+            </Button>
+
+            <Button size="sm" onClick={Step2Validate} variant="primary">
+              Next
+            </Button>
+          </Col>
+        </Row>
+      )}
+      {currentStep === '3' && (
+        <>
+          <Col className="mt-2 mb-2">
+            <h6 className="poppins">
+              <input
+                type="checkbox"
+                checked={showTravelEssentials}
+                onChange={() => setShowTravelEssentials(!showTravelEssentials)}
+              />{' '}
+              &nbsp; Travel Essentials
+            </h6>
+          </Col>
+          {showTravelEssentials && (
+            <>
+              <Col md={12}>
+                <Editor
+                  value={travelEsen}
+                  onChange={(e) => setTravelEsen(e.target.value)}
+                  containerProps={{
+                    style: {
+                      resize: 'vertical',
+                      minHeight: '40vh',
+                      marginInline: 'auto',
+                      fontSize: '0.8rem',
+                    },
+                  }}
+                />
+              </Col>
+            </>
+          )}
+
+          <Col className="mt-2 mb-2">
+            <h6 className="poppins">
+              {' '}
+              <input
+                type="checkbox"
+                checked={showFAQs}
+                onChange={() => setShowFAQs(!showFAQs)}
+              />{' '}
+              &nbsp;FAQs
+            </h6>
+          </Col>
+          {showFAQs && (
+            <>
+              <Col md={12}>
+                <Editor
+                  value={faqDetails}
+                  onChange={(e) => setFaqDetails(e.target.value)}
+                  containerProps={{
+                    style: {
+                      resize: 'vertical',
+                      minHeight: '40vh',
+                      marginInline: 'auto',
+                      fontSize: '0.8rem',
+                    },
+                  }}
+                />
+              </Col>
+            </>
+          )}
+
+          <Col className="mt-2 mb-2">
+            <h6 className="poppins">
+              {' '}
+              <input
+                type="checkbox"
+                checked={showTermsConditions}
+                onChange={() => setShowTermsConditions(!showTermsConditions)}
+              />{' '}
+              &nbsp; Terms & Conditions
+            </h6>
+          </Col>
+          {showTermsConditions && (
+            <>
+              <Col md={12}>
+                <Editor
+                  value={termConditions}
+                  onChange={(e) => setTermConditions(e.target.value)}
+                  containerProps={{
+                    style: {
+                      resize: 'vertical',
+                      minHeight: '40vh',
+                      marginInline: 'auto',
+                      fontSize: '0.8rem',
+                    },
+                  }}
+                />
+              </Col>
+            </>
+          )}
+
+          <Col className="mt-2 mb-2">
+            <h6 className="poppins">
+              <input
+                type="checkbox"
+                checked={showPaymentTerms}
+                onChange={() => setShowPaymentTerms(!showPaymentTerms)}
+              />{' '}
+              &nbsp; Payment Terms
+            </h6>
+          </Col>
+          {showPaymentTerms && (
+            <>
+              <Col md={12}>
+                <Editor
+                  value={paymentTerm}
+                  onChange={(e) => setPaymentTerm(e.target.value)}
+                  containerProps={{
+                    style: {
+                      resize: 'vertical',
+                      minHeight: '40vh',
+                      marginInline: 'auto',
+                    },
+                  }}
+                />
+              </Col>
+            </>
+          )}
+
+          <Col md={12} className="mt-2">
+            <Button
+              size="sm"
+              className="me-2"
+              onClick={() => setcurrentStep('2')}
+              variant="primary"
+            >
+              Previous
+            </Button>
+            <Button onClick={!loading && Step3Validate} size="sm" variant="primary">
+              {loading ? <Spinner animation="border" size="sm" /> : 'Update Hotel'}
+            </Button>
+          </Col>
+        </>
+      )}
+      <br />
+      <br />
     </>
   )
 }
