@@ -44,7 +44,7 @@ function LogIn() {
         password,
       })
       let { success, message, error, token, userId } = res.data || res
-      console.log(res)
+      // console.log(res)
 
       if (success) {
         MyError.success(message)

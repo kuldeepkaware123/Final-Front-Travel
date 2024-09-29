@@ -107,7 +107,7 @@ function PackageDynamicPrivate() {
         setPackageData(packageExist)
         setStartDate(
           packageExist.bookingDate &&
-          new Date(packageExist.bookingDate).toISOString().split('T')[0],
+            new Date(packageExist.bookingDate).toISOString().split('T')[0],
         )
       } else {
         MyError.error(message || error || 'Server Error Please try again later.')
@@ -300,7 +300,6 @@ function PackageDynamicPrivate() {
   return (
     <>
       <Header />
-
 
       <section
         className="breadcrumb-main pb-20 pt-14"
@@ -826,8 +825,8 @@ function PackageDynamicPrivate() {
                               className="px-3 py-5 rounded-2"
                             >
                               {packageData &&
-                                packageData.fixedDeparture &&
-                                packageData.fixedDeparture.type === true ? (
+                              packageData.fixedDeparture &&
+                              packageData.fixedDeparture.type === true ? (
                                 <>
                                   <h5 className="text-white">Fixed Departure</h5>
                                   <div>
@@ -869,21 +868,21 @@ function PackageDynamicPrivate() {
                                           ₹{' '}
                                           {packageData && packageData.offer
                                             ? calculateDiscountedPrice(
-                                              packageData.offer.type,
-                                              fixedOption === 'tripleSharing'
-                                                ? packageData &&
-                                                packageData.fixedDeparture.tripleSharing
-                                                  .totalPrice
-                                                : packageData &&
-                                                packageData.fixedDeparture.doubleSharing
-                                                  .totalPrice,
-                                              packageData.offer.value,
-                                            )
+                                                packageData.offer.type,
+                                                fixedOption === 'tripleSharing'
+                                                  ? packageData &&
+                                                      packageData.fixedDeparture.tripleSharing
+                                                        .totalPrice
+                                                  : packageData &&
+                                                      packageData.fixedDeparture.doubleSharing
+                                                        .totalPrice,
+                                                packageData.offer.value,
+                                              )
                                             : fixedOption === 'tripleSharing'
                                               ? packageData &&
-                                              packageData.fixedDeparture.tripleSharing.totalPrice
+                                                packageData.fixedDeparture.tripleSharing.totalPrice
                                               : packageData &&
-                                              packageData.fixedDeparture.doubleSharing.totalPrice}
+                                                packageData.fixedDeparture.doubleSharing.totalPrice}
                                         </b>{' '}
                                         <sub>/ Group</sub> &nbsp;
                                         <Button
@@ -921,16 +920,16 @@ function PackageDynamicPrivate() {
                                           ₹{' '}
                                           {packageData && packageData.offer
                                             ? calculateDiscountedPrice(
-                                              packageData.offer.type,
-                                              packageData.costOptions.totalPrice,
-                                              packageData.offer.value,
-                                            )
+                                                packageData.offer.type,
+                                                packageData.costOptions.totalPrice,
+                                                packageData.offer.value,
+                                              )
                                             : packageData.costOptions.totalPrice}
                                         </b>{' '}
                                         <sub>
                                           /{' '}
                                           {packageData &&
-                                            packageData.costOptions.type === 'total cost'
+                                          packageData.costOptions.type === 'total cost'
                                             ? 'Total Cost'
                                             : 'Per Person'}
                                         </sub>{' '}
@@ -990,27 +989,27 @@ function PackageDynamicPrivate() {
                                     ₹{' '}
                                     {packageData && packageData.offer
                                       ? parseInt(
-                                        calculateDiscountedPrice(
-                                          packageData.offer.type,
-                                          parseInt(
-                                            fixedOption === 'tripleSharing'
-                                              ? packageData &&
-                                              packageData.fixedDeparture.tripleSharing
-                                                .totalPrice
-                                              : packageData &&
-                                              packageData.fixedDeparture.doubleSharing
-                                                .totalPrice,
+                                          calculateDiscountedPrice(
+                                            packageData.offer.type,
+                                            parseInt(
+                                              fixedOption === 'tripleSharing'
+                                                ? packageData &&
+                                                    packageData.fixedDeparture.tripleSharing
+                                                      .totalPrice
+                                                : packageData &&
+                                                    packageData.fixedDeparture.doubleSharing
+                                                      .totalPrice,
+                                            ),
+                                            packageData.offer.value,
                                           ),
-                                          packageData.offer.value,
-                                        ),
-                                      ) * groupSize
+                                        ) * groupSize
                                       : parseInt(
-                                        fixedOption === 'tripleSharing'
-                                          ? packageData &&
-                                          packageData.fixedDeparture.tripleSharing.totalPrice
-                                          : packageData &&
-                                          packageData.fixedDeparture.doubleSharing.totalPrice,
-                                      ) * groupSize}
+                                          fixedOption === 'tripleSharing'
+                                            ? packageData &&
+                                                packageData.fixedDeparture.tripleSharing.totalPrice
+                                            : packageData &&
+                                                packageData.fixedDeparture.doubleSharing.totalPrice,
+                                        ) * groupSize}
                                     /-
                                   </b>{' '}
                                   &nbsp;
@@ -1041,15 +1040,15 @@ function PackageDynamicPrivate() {
                                     ₹{' '}
                                     {packageData && packageData.offer
                                       ? calculateDiscountedPrice(
-                                        packageData.offer.type,
-                                        parseInt(
-                                          packageData && packageData.costOptions.totalPrice,
-                                        ),
-                                        packageData.offer.value,
-                                      )
+                                          packageData.offer.type,
+                                          parseInt(
+                                            packageData && packageData.costOptions.totalPrice,
+                                          ),
+                                          packageData.offer.value,
+                                        )
                                       : parseInt(
-                                        packageData && packageData.costOptions.totalPrice,
-                                      ) * groupSize}
+                                          packageData && packageData.costOptions.totalPrice,
+                                        ) * groupSize}
                                     /-
                                   </b>{' '}
                                   &nbsp;

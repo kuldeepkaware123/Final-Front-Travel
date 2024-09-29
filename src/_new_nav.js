@@ -82,6 +82,11 @@ const _new_nav = [
         name: 'All Hotels',
         to: '/admin/hotels/all',
       },
+      {
+        component: CNavItem,
+        name: 'All Bookings',
+        to: '/admin/hotels/bookings',
+      },
     ],
   },
   {
@@ -199,6 +204,11 @@ const _new_nav = [
         component: CNavItem,
         name: 'Best Tour',
         to: '/admin/best/tour',
+      },
+      {
+        component: CNavItem,
+        name: 'Best Hotel',
+        to: '/admin/best/hotel',
       },
       {
         component: CNavItem,

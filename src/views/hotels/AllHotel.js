@@ -121,6 +121,9 @@ const AllHotel = () => {
               Hotel Title
             </th>
             <th className="text-white text-truncate" style={{ background: '#212631' }}>
+              Hotel Price (Per Person)
+            </th>
+            <th className="text-white text-truncate" style={{ background: '#212631' }}>
               Publish Date
             </th>
             <th className="text-white text-truncate" style={{ background: '#212631' }}>
@@ -153,6 +156,7 @@ const AllHotel = () => {
                   {item.title.split(' ').slice(0, 10).join(' ')}
                   {item.title.split(' ').length > 10 ? '...' : ''}
                 </td>
+                <td className="text-dark">{item?.pricePerPerson}</td>
                 <td className="text-dark">
                   {new Date(item.createdAt).toISOString().split('T')[0]}
                 </td>

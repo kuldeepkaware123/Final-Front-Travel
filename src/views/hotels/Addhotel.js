@@ -35,7 +35,6 @@ const Addhotel = () => {
   const [AllTripTypeSelected, setAllTripTypeSelected] = useState([])
   const [AllDestinations, setAllDestinations] = useState([])
   const [AllDestinationsSelected, setAllDestinationsSelected] = useState([])
-  const [AllHotelsSelected, setAllHotelsSelected] = useState([])
   const [priceIncludes, setPriceIncludes] = useState([''])
 
   const handlepriceIncludesAddItem = () => {
@@ -195,6 +194,8 @@ const Addhotel = () => {
     setcurrentStep('2')
   }
 
+  const [pricePerPerson, setPricePerPerson] = useState('')
+
   const Step2Validate = () => {
     if (!dayActivities || dayActivities.length === 0) {
       return MyError.warn('Please Add Itinerary.')
@@ -214,6 +215,7 @@ const Addhotel = () => {
         nights: numNights,
         priceIncludes,
         priceExcludes,
+        pricePerPerson,
       }),
     )
 
@@ -243,6 +245,7 @@ const Addhotel = () => {
     // Create new FormData instance
     const formData = new FormData()
     formData.append('title', hotelData.title)
+    formData.append('pricePerPerson', hotelData.pricePerPerson)
 
     hotelData.destination.forEach((item, index) => {
       formData.append(`destination[${index}]`, item)
@@ -505,6 +508,18 @@ const Addhotel = () => {
                 className="input-border"
                 type="text"
                 placeholder="Enter Days"
+              />
+            </Form.Group>
+          </Col>
+          <Col md={12} className="mt-2">
+            <Form.Group>
+              <Form.Label className="small-font">Enter Price (per person)</Form.Label>
+              <Form.Control
+                onChange={(e) => setPricePerPerson(e.target.value)}
+                value={pricePerPerson}
+                className="input-border"
+                type="number"
+                placeholder="Enter Price"
               />
             </Form.Group>
           </Col>

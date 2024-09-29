@@ -18,15 +18,17 @@ function HotelPackage() {
   const [loading, setLoading] = useState(false)
   const [destination, setDestination] = useState(null)
 
+  console.log(id)
+
   const fetchPackages = async () => {
     setLoading(true)
     try {
-      let res = await MyAPI.GET(`/public/packages/${id}`)
+      let res = await MyAPI.GET(`/public/hotels/${id}`)
       let { success, message, error, data } = res.data || res
       console.log(res.data)
       if (success) {
-        const filteredDestinations = data.packages.filter(
-          (destination) => !destination.isPrivate && destination.status === 'active',
+        const filteredDestinations = data.hotels.filter(
+          (destination) => destination.status === 'active',
         )
         setAllPackages(filteredDestinations)
         setDestination(data.destination)
@@ -55,7 +57,6 @@ function HotelPackage() {
     <>
       <Header />
 
-
       <section
         className="breadcrumb-main pb-20 pt-14"
         style={{
@@ -72,7 +73,7 @@ function HotelPackage() {
           <div className="container">
             <div className="breadcrumb-content text-center">
               <h1 className="mb-3">
-                {destination ? `${destination.name} Packages` : 'Loading....'}{' '}
+                {destination ? `${destination.name} Hotels` : 'Loading....'}{' '}
               </h1>
               <nav aria-label="breadcrumb" className="d-block">
                 <ul className="breadcrumb">
@@ -125,13 +126,6 @@ function HotelPackage() {
                       <div key={index} className="col-lg-4 col-md-4 mb-4">
                         <Link to={`/hotelhotel${item._id}`}>
                           <div className="dealwrapper red">
-                            <div className="ribbon-wrapper">
-                              <div className="ribbon-tag">
-                                {item.offer.type === 'percentage'
-                                  ? `${item.offer.value}% Off`
-                                  : `₹ ${item.offer.value} Off`}
-                              </div>
-                            </div>
                             <div className="trend-item rounded box-shadow">
                               <div className="trend-image position-relative">
                                 <img
@@ -172,9 +166,6 @@ function HotelPackage() {
                                   </div>
                                   <span className="ms-2">(12)</span>
                                 </div>
-                                {/* <p className=" border-b pb-2 mb-2">
-                                  {truncateText(item.description ?? '', 30)}
-                                </p> */}
                               </div>
                             </div>
                           </div>
@@ -223,26 +214,6 @@ function HotelPackage() {
                                 </div>
                                 <span className="ms-2">(12)</span>
                               </div>
-                              {/* <p className=" border-b pb-2 mb-2">
-                                {truncateText(item.description ?? '', 30)}
-                              </p> */}
-                              {/* <div className="entry-meta">
-                              <div className="entry-author d-flex align-items-center">
-                                <p className="mb-0">
-                                  <span className="theme fw-bold fs-5">
-                                    ₹
-                                    {item.fixedDeparture.type === true
-                                      ? item.fixedDeparture.tripleSharing.totalPrice
-                                      : item.costOptions.totalPrice}{' '}
-                                    /-
-                                  </span>{' '}
-                                  |{' '}
-                                  {item.fixedDeparture.type === true
-                                    ? 'Triple Sharing'
-                                    : item.costOptions.type}
-                                </p>
-                              </div>
-                            </div> */}
                             </div>
                           </div>
                         </Link>
@@ -259,52 +230,6 @@ function HotelPackage() {
           </div>
         </div>
       </section>
-
-      {/* <section
-        className="discount-action pt-0"
-        style={{
-          backgroundImage:
-            'url(https://htmldesigntemplates.com/html/travelin/images/section-bg1.png)',
-          backgroundPosition: 'center',
-        }}
-      >
-        <div className="container">
-          <div className="call-banner rounded pt-10 pb-14">
-            <div className="call-banner-inner w-75 mx-auto text-center px-5">
-              <div className="trend-content-main">
-                <div className="trend-content mb-5 pb-2 px-5">
-                  <h5 className="mb-1 theme">Love Where Your're Going</h5>
-                  <h2>
-                    <a href="detail-fullwidth.html">
-                      Explore Your Life, <span className="theme1"> Travel Where You Want!</span>
-                    </a>
-                  </h2>
-                  <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                    incididunt ut labore et dolore magna aliqua.
-                  </p>
-                </div>
-                <div className="video-button text-center position-relative">
-                  <div className="call-button text-center">
-                    <button
-                      type="button"
-                      className="play-btn js-video-button"
-                      data-video-id="152879427"
-                      data-channel="vimeo"
-                    >
-                      <i className="fa fa-play bg-blue"></i>
-                    </button>
-                  </div>
-                  <div className="video-figure"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="white-overlay"></div>
-        <div className="white-overlay"></div>
-      </section> */}
-      {/* <div className="section-shape  top-inherit bottom-0" style={{backgroundImage:'url(https://htmldesigntemplates.com/html/travelin/images/shape6.png)'}}></div> */}
 
       <Footer />
       <WhatsAppHelp />

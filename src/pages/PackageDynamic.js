@@ -499,7 +499,7 @@ function PackageDynamic() {
                       >
                         Term & Conditions
                       </Button>
-                      {/* {!localStorage.getItem('isAdmin') && (
+                      {!localStorage.getItem('isAdmin') && (
                         <Button
                           className={`outline-none`}
                           style={{
@@ -512,7 +512,7 @@ function PackageDynamic() {
                         >
                           Booking
                         </Button>
-                      )} */}
+                      )}
                     </div>
                     <div className="tab-content mt-1 mb-4">
                       {activeTab === 'overview' && (
@@ -588,6 +588,316 @@ function PackageDynamic() {
                                 </Zoom>
                               </div>
                             ))}
+                        </div>
+                      )}
+                      {activeTab === 'booking' && (
+                        <div className="border-bottom mb-2">
+                          <Row className="py-2 border-bottom">
+                            <Col md={10}>
+                              Select Date and Pricing Options for this trip in the Trip Options
+                              setting.
+                            </Col>
+                            <Col md={2}>
+                              <Button variant="danger">
+                                {' '}
+                                <MdOutlineSettingsBackupRestore size={22} />
+                                &nbsp; Clear
+                              </Button>
+                            </Col>
+                          </Row>
+                          <div className="d-flex align-items-center py-3">
+                            <OverlayTrigger
+                              placement="right"
+                              overlay={
+                                <Tooltip id="tooltip-right">
+                                  Select a Date to view available pricings and other options.
+                                </Tooltip>
+                              }
+                            >
+                              <Button
+                                style={{ background: '#244855' }}
+                                className="d-flex align-items-center border-0"
+                                onClick={() => document.getElementById('datePicker').click()}
+                              >
+                                {startDate ? formattedDate(startDate) : 'Select a Date'}
+                                <FaCalendarAlt className="ms-2" />
+                              </Button>
+                            </OverlayTrigger>
+                            <DatePicker
+                              id="datePicker"
+                              selected={startDate}
+                              minDate={new Date()}
+                              onChange={(date) => setStartDate(date)}
+                              customInput={<input type="text" className="d-none" />}
+                              popperClassName="custom-datepicker"
+                              popperProps={{
+                                modifiers: [
+                                  {
+                                    name: 'zIndex',
+                                    options: {
+                                      zIndex: 9999, // Adjust the zIndex value as needed
+                                    },
+                                  },
+                                ],
+                              }}
+                            />
+                          </div>
+                          {startDate && !localStorage.getItem('isAdmin') && (
+                            <Container>
+                              <Row>
+                                <Col
+                                  md={12}
+                                  style={{ background: '#244855' }}
+                                  className="px-3 py-5 rounded-2"
+                                >
+                                  {packageData &&
+                                  packageData.fixedDeparture &&
+                                  packageData.fixedDeparture.type === true ? (
+                                    <>
+                                      <h5 className="text-white">Fixed Departure</h5>
+                                      <div>
+                                        <label>
+                                          <input
+                                            type="radio"
+                                            name="sharingOption"
+                                            value="tripleSharing"
+                                            checked={fixedOption === 'tripleSharing'}
+                                            onChange={(e) => setFixedOption(e.target.value)}
+                                          />
+                                          &nbsp; Triple Sharing
+                                        </label>
+                                      </div>
+                                      <div>
+                                        <label>
+                                          <input
+                                            type="radio"
+                                            name="sharingOption"
+                                            value="doubleSharing"
+                                            checked={fixedOption === 'doubleSharing'}
+                                            onChange={(e) => setFixedOption(e.target.value)}
+                                          />
+                                          &nbsp; Double Sharing
+                                        </label>
+                                      </div>
+                                      <Col
+                                        md={12}
+                                        className="py-1 px-2 border border-white mt-2 rounded-2 shadow"
+                                      >
+                                        <div className="d-flex justify-content-between">
+                                          <div className="text-white">
+                                            {fixedOption === 'tripleSharing'
+                                              ? 'Triple Sharing'
+                                              : 'Double Sharing'}
+                                          </div>
+                                          <div className="text-white">
+                                            <b className="text-white">
+                                              ₹{' '}
+                                              {packageData && packageData.offer
+                                                ? calculateDiscountedPrice(
+                                                    packageData.offer.type,
+                                                    fixedOption === 'tripleSharing'
+                                                      ? packageData &&
+                                                          packageData.fixedDeparture.tripleSharing
+                                                            .totalPrice
+                                                      : packageData &&
+                                                          packageData.fixedDeparture.doubleSharing
+                                                            .totalPrice,
+                                                    packageData.offer.value,
+                                                  )
+                                                : fixedOption === 'tripleSharing'
+                                                  ? packageData &&
+                                                    packageData.fixedDeparture.tripleSharing
+                                                      .totalPrice
+                                                  : packageData &&
+                                                    packageData.fixedDeparture.doubleSharing
+                                                      .totalPrice}
+                                            </b>{' '}
+                                            <sub>/ Group</sub> &nbsp;
+                                            <Button
+                                              className="rounded-0"
+                                              onClick={decrementGroupSize}
+                                              size="sm"
+                                            >
+                                              <i className="fa fa-minus" />
+                                            </Button>
+                                            <Button
+                                              className="bg-transparent rounded-0 px-3"
+                                              size="sm"
+                                            >
+                                              {groupSize ?? 0}
+                                            </Button>
+                                            <Button
+                                              onClick={incrementGroupSize}
+                                              className=" rounded-0"
+                                              size="sm"
+                                            >
+                                              <i className="fa fa-plus" />
+                                            </Button>
+                                          </div>
+                                        </div>
+                                      </Col>
+                                    </>
+                                  ) : (
+                                    <>
+                                      <h5 className="text-white">Cost Options</h5>
+                                      <Col
+                                        md={12}
+                                        className="py-1 px-2 border border-white mt-2 rounded-2 shadow"
+                                      >
+                                        <div className="d-flex justify-content-between">
+                                          <div className="text-white">Select Options</div>
+                                          <div className="text-white">
+                                            <b className="text-white">
+                                              ₹{' '}
+                                              {packageData && packageData.offer
+                                                ? calculateDiscountedPrice(
+                                                    packageData.offer.type,
+                                                    packageData.costOptions.totalPrice,
+                                                    packageData.offer.value,
+                                                  )
+                                                : packageData.costOptions.totalPrice}
+                                            </b>{' '}
+                                            <sub>
+                                              /{' '}
+                                              {packageData &&
+                                              packageData.costOptions.type === 'total cost'
+                                                ? 'Per Couple'
+                                                : 'Per Person'}
+                                            </sub>{' '}
+                                            &nbsp;
+                                            <Button
+                                              className="rounded-0"
+                                              onClick={decrementGroupSize}
+                                              size="sm"
+                                            >
+                                              <i className="fa fa-minus" />
+                                            </Button>
+                                            <Button
+                                              className="bg-transparent rounded-0 px-3"
+                                              size="sm"
+                                            >
+                                              {groupSize ?? 0}
+                                            </Button>
+                                            <Button
+                                              onClick={incrementGroupSize}
+                                              className=" rounded-0"
+                                              size="sm"
+                                            >
+                                              <i className="fa fa-plus" />
+                                            </Button>
+                                          </div>
+                                        </div>
+                                      </Col>
+                                    </>
+                                  )}
+                                </Col>
+                                {packageData && packageData.fixedDeparture.type === true && (
+                                  <Col
+                                    md={12}
+                                    style={{ background: '#244855' }}
+                                    className="px-3 py-2 rounded-2 mt-1 d-flex align-items-center justify-content-between flex-wrap"
+                                  >
+                                    <span className="d-flex align-items-center">
+                                      <b className="text-white">Pricing :</b>&nbsp;
+                                      {fixedOption === 'tripleSharing'
+                                        ? 'Triple Sharing'
+                                        : 'Double Sharing'}
+                                    </span>
+                                    <spa className="d-flex align-items-center">
+                                      <b className="text-white">Trip Date :</b>&nbsp;
+                                      {startDate ? formattedDate(startDate) : 'Date  Not Selected.'}
+                                    </spa>
+                                    <span className="d-flex align-items-center justify-content-center">
+                                      <b className="text-white">
+                                        ₹{' '}
+                                        {packageData && packageData.offer
+                                          ? parseInt(
+                                              calculateDiscountedPrice(
+                                                packageData.offer.type,
+                                                parseInt(
+                                                  fixedOption === 'tripleSharing'
+                                                    ? packageData &&
+                                                        packageData.fixedDeparture.tripleSharing
+                                                          .totalPrice
+                                                    : packageData &&
+                                                        packageData.fixedDeparture.doubleSharing
+                                                          .totalPrice,
+                                                ),
+                                                packageData.offer.value,
+                                              ),
+                                            ) * groupSize
+                                          : parseInt(
+                                              fixedOption === 'tripleSharing'
+                                                ? packageData &&
+                                                    packageData.fixedDeparture.tripleSharing
+                                                      .totalPrice
+                                                : packageData &&
+                                                    packageData.fixedDeparture.doubleSharing
+                                                      .totalPrice,
+                                            ) * groupSize}
+                                        /-
+                                      </b>{' '}
+                                      &nbsp;
+                                    </span>
+                                    <Button
+                                      onClick={() =>
+                                        handleBooking(
+                                          packageData && packageData.fixedDeparture.type,
+                                        )
+                                      }
+                                    >
+                                      Book Now
+                                    </Button>
+                                  </Col>
+                                )}
+                                {packageData && packageData.fixedDeparture.type === false && (
+                                  <Col
+                                    md={12}
+                                    style={{ background: '#244855' }}
+                                    className="px-3 py-2 rounded-2 mt-1 d-flex align-items-center justify-content-between flex-wrap"
+                                  >
+                                    <spa className="d-flex align-items-center">
+                                      <b className="text-white">Trip Date :</b>&nbsp;
+                                      {startDate ? formattedDate(startDate) : 'Date  Not Selected.'}
+                                    </spa>
+                                    <span className="d-flex align-items-center justify-content-center">
+                                      <b className="text-white">
+                                        ₹{' '}
+                                        {packageData && packageData.offer
+                                          ? calculateDiscountedPrice(
+                                              packageData.offer.type,
+                                              parseInt(
+                                                packageData && packageData.costOptions.totalPrice,
+                                              ),
+                                              packageData.offer.value,
+                                            ) * groupSize
+                                          : parseInt(
+                                              packageData && packageData.costOptions.totalPrice,
+                                            ) * groupSize}
+                                        /-
+                                      </b>{' '}
+                                      &nbsp;
+                                    </span>
+                                    <Button
+                                      onClick={() =>
+                                        handleBooking(
+                                          packageData && packageData.fixedDeparture.type,
+                                        )
+                                      }
+                                    >
+                                      Book Now
+                                    </Button>
+                                  </Col>
+                                )}
+                              </Row>
+                            </Container>
+                          )}
+                          {startDate && localStorage.getItem('isAdmin') && (
+                            //show warning admin can not be book feature
+                            <div className="alert alert-danger px-3 py-1" role="alert">
+                              Admin cannot book this package.
+                            </div>
+                          )}
                         </div>
                       )}
                       {lightboxOpen && (
@@ -676,86 +986,86 @@ function PackageDynamic() {
                           )}
                         </>
                       )}
-                      
                     </div>
                   </div>
                 </div>
 
                 <div className="col-12 col-lg-4 mt-2  py-3 border-2 rounded-3 shadow-sm ">
-                <p className="text-dark mb-3">
-                        From &nbsp;
-                        {packageData &&
-                          packageData.fixedDeparture.type === false &&
-                          (packageData.offer ? (
-                            <>
-                              <span className="fw-bold  text-truncate text-decoration-line-through">
-                                ₹{packageData.costOptions.totalPrice}
-                              </span>
-                              &nbsp; &nbsp;
-                              <span>
-                                <b>
-                                  ₹
-                                  {calculateDiscountedPrice(
-                                    packageData.offer.type,
-                                    packageData.costOptions.totalPrice,
-                                    packageData.offer.value,
-                                  )}{' '}
-                                </b>
-                                /-
-                              </span>
-                            </>
-                          ) : (
-                            <span className="fw-bold ">
-                              ₹{packageData.costOptions.totalPrice} /-
-                            </span>
-                          ))}
-                        {packageData &&
-                          packageData.fixedDeparture.type === true &&
-                          (packageData.offer ? (
-                            <>
-                              <span className="fw-bold  text-truncate text-decoration-line-through">
-                                ₹{packageData.fixedDeparture.tripleSharing.totalPrice}
-                              </span>
-                              &nbsp; &nbsp;
-                              <span>
-                                <b>
-                                  ₹
-                                  {calculateDiscountedPrice(
-                                    packageData.offer.type,
-                                    packageData.fixedDeparture.tripleSharing.totalPrice,
-                                    packageData.offer.value,
-                                  )}{' '}
-                                </b>
-                                /-
-                              </span>
-                            </>
-                          ) : (
-                            <span className="fw-bold ">
-                              ₹{packageData.fixedDeparture.tripleSharing.totalPrice} /-
-                            </span>
-                          ))}
-                      </p>
+                  <p className="text-dark mb-3">
+                    From &nbsp;
+                    {packageData &&
+                      packageData.fixedDeparture.type === false &&
+                      (packageData.offer ? (
+                        <>
+                          <span className="fw-bold  text-truncate text-decoration-line-through">
+                            ₹{packageData.costOptions.totalPrice}
+                          </span>
+                          &nbsp; &nbsp;
+                          <span>
+                            <b>
+                              ₹
+                              {calculateDiscountedPrice(
+                                packageData.offer.type,
+                                packageData.costOptions.totalPrice,
+                                packageData.offer.value,
+                              )}{' '}
+                            </b>
+                            /-
+                          </span>
+                        </>
+                      ) : (
+                        <span className="fw-bold ">₹{packageData.costOptions.totalPrice} /-</span>
+                      ))}
+                    {packageData &&
+                      packageData.fixedDeparture.type === true &&
+                      (packageData.offer ? (
+                        <>
+                          <span className="fw-bold  text-truncate text-decoration-line-through">
+                            ₹{packageData.fixedDeparture.tripleSharing.totalPrice}
+                          </span>
+                          &nbsp; &nbsp;
+                          <span>
+                            <b>
+                              ₹
+                              {calculateDiscountedPrice(
+                                packageData.offer.type,
+                                packageData.fixedDeparture.tripleSharing.totalPrice,
+                                packageData.offer.value,
+                              )}{' '}
+                            </b>
+                            /-
+                          </span>
+                        </>
+                      ) : (
+                        <span className="fw-bold ">
+                          ₹{packageData.fixedDeparture.tripleSharing.totalPrice} /-
+                        </span>
+                      ))}
+                  </p>
 
-                  <div className='d-flex gap-3'>
-                  {!localStorage.getItem('isAdmin') && (
+                  <div className="d-flex gap-3">
+                    {!localStorage.getItem('isAdmin') && (
+                      <Button
+                        onClick={BookingClick}
+                        style={{ background: '#244855', borderColor: '#244855' }}
+                        className="text-truncate"
+                      >
+                        Book Now
+                      </Button>
+                    )}
                     <Button
-                      onClick={BookingClick}
+                      onClick={handleDownload}
+                      disabled={btnLoading}
                       style={{ background: '#244855', borderColor: '#244855' }}
                       className="text-truncate"
                     >
-                      Book Now
+                      {btnLoading ? (
+                        <Spinner variant="secondary" size="sm" />
+                      ) : (
+                        'Download Itinerary'
+                      )}
                     </Button>
-                  )}
-                  <Button
-                    onClick={handleDownload}
-                    disabled={btnLoading}
-                    style={{ background: '#244855', borderColor: '#244855' }}
-                    className="text-truncate"
-                  >
-                    {btnLoading ? <Spinner variant="secondary" size="sm" /> : 'Download Itinerary'}
-                  </Button>
                   </div>
-                
                 </div>
               </div>
             </div>

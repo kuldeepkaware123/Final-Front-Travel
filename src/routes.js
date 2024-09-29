@@ -8,6 +8,7 @@ const Typography = React.lazy(() => import('./views/theme/typography/Typography'
 const DashboardUser = React.lazy(() => import('./userView/dashboard/Dashboard.js'))
 const UserProfileEdit = React.lazy(() => import('./userView/profile/EditProfile.js'))
 const UserBooking = React.lazy(() => import('./userView/bookings/MyBookings.js'))
+const UserBookingHotels = React.lazy(() => import('./userView/hotel/myBookings.js'))
 const BookingDetailsPage = React.lazy(() => import('./userView/bookings/BookingDetailsPage.js'))
 const AllEnquiry = React.lazy(() => import('./userView/contact/Contac.js'))
 const AllEnquiryByID = React.lazy(() => import('./userView/contact/PackageManager.js'))
@@ -64,10 +65,6 @@ const ContactReq = React.lazy(() => import('./views/contact/Contac.js'))
 const AddPackages = React.lazy(() => import('./views/Packages/AddPackages.js'))
 const AllPackages = React.lazy(() => import('./views/Packages/AllPackages.js'))
 const EditPackages = React.lazy(() => import('./views/Packages/EditPackages.js'))
-const AddCar = React.lazy(() => import('./views/car/AddCar.js'))
-const AllCar = React.lazy(() => import('./views/car/AllCar.js'))
-const EditCar = React.lazy(() => import('./views/car/EditCar.js'))
-const CarBooking = React.lazy(() => import('./views/car/CarBooking.js'))
 const BookingPage = React.lazy(() => import('./views/Clients/BookingPage.js'))
 const HotDeals = React.lazy(() => import('./views/hotDeals/HotDeals.js'))
 const AddBlog = React.lazy(() => import('./views/blog/AddBlog.js'))
@@ -76,6 +73,7 @@ const EditBlog = React.lazy(() => import('./views/blog/EditBlog.js'))
 const AddHotel = React.lazy(() => import('./views/hotels/Addhotel.js'))
 const AllHotels = React.lazy(() => import('./views/hotels/AllHotel.js'))
 const EditHotel = React.lazy(() => import('./views/hotels/EditHotel.js'))
+const AllHotelBookings = React.lazy(() => import('./views/hotels/AllBookings.js'))
 const TripType = React.lazy(() => import('./views/tripType/TripType.js'))
 const Destinations = React.lazy(() => import('./views/Destinations/Destinations.js'))
 const PackageManager = React.lazy(() => import('./views/contact/PackageManager.js'))
@@ -85,8 +83,8 @@ const NewOfferPage = React.lazy(() => import('./views/offer/NewOfferPage.js'))
 const Testimonials = React.lazy(() => import('./views/Testimonials/Testimonials.js'))
 const BannerPage = React.lazy(() => import('./views/EditWebsite/BannerPage.js'))
 const BestTour = React.lazy(() => import('./views/EditWebsite/BestTour.js'))
+const BestHotel = React.lazy(() => import('./views/EditWebsite/BestHotel.js'))
 const Callback = React.lazy(() => import('./views/callback/Callback.js'))
-const Rajasthan = React.lazy(() => import('./views/EditWebsite/Rajasthan.js'))
 const MyBookings = React.lazy(() => import('./views/bookings/MyBookings.js'))
 const BookingDetailsPageAdmin = React.lazy(() => import('./views/bookings/BookingDetailsPage.js'))
 const EnquiryFormEdit = React.lazy(() => import('./pages/EnquiryFormEdit.js'))
@@ -112,10 +110,6 @@ const routes = [
   { path: '/admin/packages/all', name: 'All Packages', element: AllPackages },
   { path: '/admin/packages/edit/:id', name: 'Edit Packages', element: EditPackages },
   { path: '/admin/packages/edit/embed/:id/:enqId', name: 'Edit Packages', element: EditPackages },
-  { path: '/admin/car/add', name: 'Add Car', element: AddCar },
-  { path: '/admin/car/all', name: 'All Car', element: AllCar },
-  { path: '/admin/car/:carId/edit', name: 'Edit Car', element: EditCar },
-  { path: '/admin/car/booking/all', name: 'Car Booking', element: CarBooking },
   { path: '/admin/client/:id/bookings', name: 'Client Booking', element: BookingPage },
   { path: '/admin/client/:id/edit', name: 'Client Edit', element: EditClient },
   { path: '/admin/hot/deals', name: 'Hot Deals', element: HotDeals },
@@ -125,6 +119,7 @@ const routes = [
   { path: '/admin/hotels/add', name: 'Add Blogs', element: AddHotel },
   { path: '/admin/hotels/all', name: 'All Blogs', element: AllHotels },
   { path: '/admin/hotels/edit/:id', name: 'Edit Blogs', element: EditHotel },
+  { path: '/admin/hotels/bookings', name: 'Edit Blogs', element: AllHotelBookings },
   { path: '/admin/manage/payments-term', name: 'Payment Term', element: PaymentTerm },
   { path: '/admin/manage/travel', name: 'Travel Essentials', element: TravelEssentials },
   { path: '/admin/manage/term-conditions', name: 'Term Conditions', element: TermConditions },
@@ -138,7 +133,7 @@ const routes = [
   { path: '/admin/testimonials', name: 'Testimonials', element: Testimonials },
   { path: '/admin/banner', name: 'Banner', element: BannerPage },
   { path: '/admin/best/tour', name: 'Banner', element: BestTour },
-  { path: '/admin/rajasthan', name: 'Rajasthan', element: Rajasthan },
+  { path: '/admin/best/hotel', name: 'Banner', element: BestHotel },
   { path: '/admin/callback/request', name: 'CallBack Request', element: Callback },
   { path: '/admin/bookings', name: 'Bookings All', element: MyBookings },
   { path: '/admin/booking/:bookingId', name: 'Bookings All', element: BookingDetailsPageAdmin },
@@ -149,6 +144,7 @@ const routes = [
   { path: '/user/dashboard', name: 'Dashboard', element: DashboardUser },
   { path: '/user/edit/profile', name: 'Edit Profile', element: UserProfileEdit },
   { path: '/user/booking', name: 'Bookings', element: UserBooking },
+  { path: '/user/hotel', name: 'Bookings', element: UserBookingHotels },
   { path: '/user/booking/:bookingId', name: 'Booking', element: BookingDetailsPage },
   { path: '/user/enquiry', name: 'Enquiry', element: AllEnquiry },
   { path: '/user/enquiry/:id', name: 'Enquiry ID', element: AllEnquiryByID },

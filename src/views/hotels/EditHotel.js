@@ -82,6 +82,7 @@ const EditHotel = () => {
         title: serverHotel.title,
         days: serverHotel.days,
         nights: serverHotel.nights,
+        pricePerPerson: serverHotel.pricePerPerson,
         description: serverHotel.description,
         destination: serverHotel.destination,
         images: serverHotel.galleryImages,
@@ -107,6 +108,7 @@ const EditHotel = () => {
   const [paymentTerm, setPaymentTerm] = useState('')
   const [termConditions, setTermConditions] = useState('')
   const [travelEsen, setTravelEsen] = useState('')
+  const [pricePerPerson, setPricePerPerson] = useState('')
 
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -168,18 +170,23 @@ const EditHotel = () => {
 
   const handleCheckboxChange = (item) => {
     if (AllTripTypeSelected.includes(item)) {
-      setAllTripTypeSelected(AllTripTypeSelected.filter((tripType) => tripType !== item))
+      setAllTripTypeSelected(
+        AllTripTypeSelected.filter((tripType) => tripType !== item || item._id),
+      )
     } else {
-      setAllTripTypeSelected([...AllTripTypeSelected, item])
+      setAllTripTypeSelected([...AllTripTypeSelected, item || item._id])
     }
-    // console.log(AllTripTypeSelected)
   }
+  console.log(AllTripTypeSelected)
   const handleDestinationsChange = (item) => {
     if (AllDestinationsSelected.includes(item)) {
-      setAllDestinationsSelected(AllDestinationsSelected.filter((tripType) => tripType !== item))
+      setAllDestinationsSelected(
+        AllDestinationsSelected.filter((tripType) => tripType !== item || item._id),
+      )
     } else {
-      setAllDestinationsSelected([...AllDestinationsSelected, item])
+      setAllDestinationsSelected([...AllDestinationsSelected, item || item._id])
     }
+    console.log(AllDestinationsSelected)
   }
 
   useEffect(() => {
@@ -232,6 +239,7 @@ const EditHotel = () => {
         nights: numNights,
         priceIncludes,
         priceExcludes,
+        pricePerPerson,
       }),
     )
 
@@ -260,16 +268,17 @@ const EditHotel = () => {
       // setDestination(storeUpdatePackageData.destination)
       setNumDays(storeUpdatePackageData.days)
       setNumNights(storeUpdatePackageData.nights)
+      setPricePerPerson(storeUpdatePackageData.pricePerPerson)
 
       var all_destination = []
       storeUpdatePackageData?.destination?.forEach((item) => {
-        all_destination.push(item)
+        all_destination.push(item._id)
       })
       setAllDestinationsSelected(all_destination)
 
       var all_trip_type = []
       storeUpdatePackageData?.tripType?.forEach((item) => {
-        all_trip_type.push(item)
+        all_trip_type.push(item._id)
       })
       setAllTripTypeSelected(all_trip_type)
 
@@ -296,6 +305,7 @@ const EditHotel = () => {
     formData.append('description', hotelData.description)
     formData.append('days', hotelData.days)
     formData.append('nights', hotelData.nights)
+    formData.append('pricePerPerson', hotelData.pricePerPerson)
 
     AllDestinationsSelected.forEach((item, index) => {
       formData.append(`destination[${index}]`, item)
@@ -353,7 +363,7 @@ const EditHotel = () => {
       let res = await MyAPI.PUT(`/hotel/${id}`, formData, token)
       let { success, message, error } = res.data || res
 
-      // console.log(res)
+      console.log(res)
 
       setLoading(false)
       if (success) {
@@ -513,6 +523,19 @@ const EditHotel = () => {
                 className="input-border"
                 type="number"
                 placeholder="Enter Days"
+              />
+            </Form.Group>
+          </Col>
+
+          <Col md={12} className="mt-2">
+            <Form.Group>
+              <Form.Label className="small-font">Enter Price (per person)</Form.Label>
+              <Form.Control
+                onChange={(e) => setPricePerPerson(e.target.value)}
+                value={pricePerPerson}
+                className="input-border"
+                type="number"
+                placeholder="Enter Price (per person)"
               />
             </Form.Group>
           </Col>

@@ -1,68 +1,52 @@
-/* eslint-disable react/jsx-key */
-/* eslint-disable jsx-a11y/img-redundant-alt */
-/* eslint-disable jsx-a11y/iframe-has-title */
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import WhatsAppHelp from '../components1/WhatsAppHelp'
 import Footer from '../components1/Footer'
 import Header from '../components1/Header'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { MyAPI, MyError } from '../MyAPI'
-import { MdOutlineRateReview, MdOutlineSettingsBackupRestore } from 'react-icons/md'
 import { BiTrip } from 'react-icons/bi'
 import { TiTick } from 'react-icons/ti'
 
 import { useDispatch, useSelector } from 'react-redux'
-import { Accordion, Button, Card, Col, Container, Row, Spinner } from 'react-bootstrap'
-import { FaQuestionCircle } from 'react-icons/fa'
+import { Button, Modal } from 'react-bootstrap'
 import './model.css'
 
-import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
-import { FaCalendarAlt } from 'react-icons/fa'
-import { Tooltip, OverlayTrigger } from 'react-bootstrap'
 import { SlLocationPin } from 'react-icons/sl'
-import Timeline from './Timeline'
-import EnquiryForm from './EnquiryForm'
 
 import Zoom from 'react-medium-image-zoom'
 import 'react-medium-image-zoom/dist/styles.css'
-import EnquiryButton from '../components1/EnquiryButton'
 import RecomndedTrip from '../components1/RecomndedTrip'
-import { setBookingData, setIsBookingClicked, setUpdatePackageData } from '../store'
-import { IoClose } from 'react-icons/io5'
-import ItenaryPage from '../components1/ItenaryPage'
-import RecmmendedHotels from '../components1/RecmmendedHotels'
 
 function HotelPackageDynamic() {
   const [packageData, setPackageData] = useState(null)
-  const [allReview, setAllReview] = useState([])
-  const userId = useSelector((state) => state.userId)
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const { id } = useParams()
+  const isUser = localStorage.getItem('isUser')
+  const userId = localStorage.getItem('userId')
+  const token = useSelector((state) => state.token)
 
-  const [isPrivate, setIsPrivate] = useState(false)
+  const [showBookingModal, setShowBookingModal] = useState(false)
 
-  useEffect(() => {
-    let path = location.hash.includes('private')
-    setIsPrivate(path)
-  }, [])
+  const handleShowBookingModal = () => {
+    setShowBookingModal(true)
+  }
+
+  const handleCloseBookingModal = () => {
+    setShowBookingModal(false)
+  }
 
   const [loading, setLoading] = useState(false)
 
   const fetchPackage = async (id) => {
     setLoading(true)
     try {
-      let res = await MyAPI.GET(`/admin/package/${id}`)
-      let { success, message, error, packageExist } = res.data || res
-      console.log(res.data)
+      let res = await MyAPI.GET(`/hotel/${id}`)
+      let { success, message, error, data } = res.data || res
+      // console.log(res.data)
       if (success) {
-        if (!packageExist.isPrivate) {
-          setPackageData(packageExist)
-        } else {
-          MyError.error('Package Not Found.')
-          navigate('/')
-        }
+        setPackageData(data)
       } else {
         MyError.error(message || error || 'Server Error Please try again later.')
       }
@@ -73,119 +57,32 @@ function HotelPackageDynamic() {
     }
   }
 
-  const fetchPrivatePackage = async (id) => {
-    setLoading(true)
-    try {
-      let res = await MyAPI.GET(`/admin/package/${id}`)
-      let { success, message, error, packageExist } = res.data || res
-      console.log(res.data)
-      if (success) {
-        setPackageData(packageExist)
-      } else {
-        MyError.error(message || error || 'Server Error Please try again later.')
-      }
-    } catch (error) {
-      MyError.error(error.message)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const fetchPackageReview = async () => {
-    try {
-      let res = await MyAPI.GET(`/reviews/${id}`)
-      let { success, message, error, data } = res.data || res
-      console.log('All reviews', res.data)
-      if (success) {
-        setAllReview(data.reviews.reverse())
-      } else {
-        MyError.error(message || error || 'Server Error Please try again later')
-      }
-    } catch (error) {
-      MyError.error(error.message)
-    }
-  }
-
-  const [testimonial, setTestimonials] = useState([])
-
-  const fetchTestimonials = async () => {
-    try {
-      let res = await MyAPI.GET('/public/testimonials')
-      let { success, message, error, data } = res.data || res
-      if (success) {
-        setTestimonials(data)
-      } else {
-        MyError.error(message || error || 'Server Error Please Try again later')
-      }
-    } catch (error) {
-      MyError.error(error.message)
-    }
-  }
-
   useEffect(() => {
-    fetchTestimonials()
-  }, [])
-
-  useEffect(() => {
-    if (isPrivate) {
-      console.log('private')
-      fetchPrivatePackage(id)
-    } else {
-      console.log('public')
-      fetchPackage(id)
-    }
+    fetchPackage(id)
   }, [id])
 
-  const [activeTab, setActiveTab] = useState('overview')
-
-  const handleTabClick = (tab) => {
-    if (tab === 'booking') {
-      setActiveTab(tab)
-      dispatch(setIsBookingClicked(true))
-    } else {
-      setActiveTab(tab)
-    }
-  }
-
-  const BookingClick = () => {
-    setActiveTab('booking')
-    dispatch(setIsBookingClicked(true))
-    window.scrollTo({
-      top: 800,
-      left: 0,
-      behavior: 'smooth',
-    })
-  }
-
-  const [show, setShow] = useState(false)
-  const handleClose = () => setShow(false)
-  const handleShow = () => setShow(true)
-  const [startDate, setStartDate] = useState(null)
+  const [totalBookingPrice, setTotalBookingPrice] = useState(0)
+  const [totalPeople, setTotalPeople] = useState(0)
+  const [startDate, setStartDate] = useState('')
+  const [totalDays, setTotalDays] = useState(0)
 
   useEffect(() => {
-    if (startDate) {
-      // Create a new date object and add one day to the selected date
-      const adjustedDate = new Date(startDate)
-      adjustedDate.setDate(adjustedDate.getDate() + 1)
+    let price = packageData && packageData.pricePerPerson
 
-      // Dispatch the adjusted date
-      dispatch(
-        setBookingData({
-          startDate: adjustedDate.toISOString().split('T')[0],
-        }),
-      )
+    if (totalPeople > 0 && totalDays > 0) {
+      setTotalBookingPrice(price * totalPeople * totalDays)
     }
-  }, [startDate])
 
-  const calculateDiscountedPrice = (discountType, actualPrice, discountValue) => {
-    if (discountType === 'percentage') {
-      return actualPrice - actualPrice * (discountValue / 100)
-    } else if (discountType === 'price') {
-      return actualPrice - discountValue
-    } else {
-      throw new Error('Invalid discount type')
+    if (totalPeople <= 0) {
+      setTotalBookingPrice(0)
     }
-  }
+
+    if (totalDays <= 0) {
+      setTotalBookingPrice(0)
+    }
+  }, [totalPeople, totalDays])
+
+  const [activeTab, setActiveTab] = useState('overview')
 
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768)
 
@@ -204,22 +101,55 @@ function HotelPackageDynamic() {
     }
   }, [])
 
-  const [activeKey, setActiveKey] = useState('0') // Default to first item
-
-  const handleToggle = (index) => {
-    setActiveKey(activeKey === index ? null : index) // Toggle open/close
-  }
-
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const [lightboxIndex, setLightboxIndex] = useState('')
 
-  const openLightbox = (index) => {
-    setLightboxIndex(index)
-    setLightboxOpen(true)
-  }
-
   const closeLightbox = () => {
     setLightboxOpen(false)
+  }
+
+  const BookingClick = () => {
+    if (isUser) {
+      handleShowBookingModal()
+    } else {
+      navigate('/login')
+    }
+  }
+
+  const handleBooking = async () => {
+    if (totalPeople <= 0) {
+      MyError.error('Please Enter Number of People')
+      return
+    }
+    if (startDate === '') {
+      MyError.error('Please Enter Start Date')
+      return
+    }
+    if (totalPeople > 0 && startDate !== '') {
+      let data = {
+        hotel: id,
+        user: userId,
+        bookingStartDate: startDate,
+        totalDays: totalDays,
+        bookingPrice: totalBookingPrice,
+        totalPeople: totalPeople,
+      }
+
+      try {
+        const res = await MyAPI.POST(`/hotel-booking/${id}/${userId}`, data, token)
+
+        let { success, message, error } = res.data || res
+
+        if (success) {
+          MyError.success(message)
+          handleCloseBookingModal()
+        } else {
+          MyError.error(message || error || 'Server Error Please try again later.')
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    }
   }
 
   function formattedDate(date) {
@@ -244,48 +174,11 @@ function HotelPackageDynamic() {
     return `${months[monthIndex]} ${day} ${year}`
   }
 
-  const [fixedOption, setFixedOption] = useState('tripleSharing')
-  const [groupSize, setGroupSize] = useState(1)
-
-  const decrementGroupSize = () => {
-    if (groupSize > 0) {
-      setGroupSize(groupSize - 1)
-    }
-  }
-
-  const incrementGroupSize = () => {
-    setGroupSize(groupSize + 1)
-  }
-
-  const handleBooking = (isSingle) => {
-    dispatch(
-      setBookingData({
-        editUrl: `/package/${packageData && packageData._id}`,
-        redirectBack: '/user/checkout',
-        groupSize,
-        fixedOption,
-        isSingle,
-        packageId: packageData && packageData._id,
-      }),
-    )
-    navigate('/login')
-  }
-
   loading && (
     <div id="preloader">
       <div id="status"></div>
     </div>
   )
-
-  const childRef = useRef()
-
-  const handleDownload = () => {
-    if (childRef.current) {
-      childRef.current.handleDownloadPDF()
-    }
-  }
-
-  const [btnLoading, setBtnLoading] = useState(false)
 
   return (
     <>
@@ -356,12 +249,6 @@ function HotelPackageDynamic() {
                             {packageData && packageData.destination?.map((item) => item.name)}
                           </div>
                         )}
-                      {/* {testimonial && testimonial.length > 0 && (
-                        <div className="mr-3">
-                          <MdOutlineRateReview size={20} /> &nbsp; Reviews :{' '}
-                          {testimonial.length || 0}
-                        </div>
-                      )} */}
                     </li>
                   </ul>
                 </div>
@@ -421,8 +308,6 @@ function HotelPackageDynamic() {
                 </div>
               </div>
 
-              <EnquiryForm show={show} setShow={setShow} />
-
               <div className="row mt-4">
                 <div className="col-12 col-lg-8">
                   <div>
@@ -439,7 +324,7 @@ function HotelPackageDynamic() {
                       >
                         Overview
                       </Button>
-                     
+
                       <Button
                         className={`outline-none`}
                         style={{
@@ -452,7 +337,7 @@ function HotelPackageDynamic() {
                       >
                         Hotels Includes
                       </Button>
-                     
+
                       <Button
                         className={`outline-none`}
                         style={{
@@ -477,51 +362,11 @@ function HotelPackageDynamic() {
                       >
                         Term & Conditions
                       </Button>
-                      {/* {!localStorage.getItem('isAdmin') && (
-                        <Button
-                          className={`outline-none`}
-                          style={{
-                            background: activeTab === 'booking' ? '#244855' : 'transparent',
-                            color: activeTab === 'booking' ? '#fff' : '#244855',
-                            borderColor: '#244855',
-                            whiteSpace: 'nowrap',
-                          }}
-                          onClick={() => handleTabClick('booking')}
-                        >
-                          Booking
-                        </Button>
-                      )} */}
                     </div>
                     <div className="tab-content mt-1 mb-4">
                       {activeTab === 'overview' && (
                         <div>{packageData && packageData.description}</div>
                       )}
-                      {/* {activeTab === 'trip-outline' && (
-                        <div>
-                          {isMobile ? (
-                            <Accordion activeKey={activeKey}>
-                              {packageData &&
-                                packageData.itineraries &&
-                                packageData.itineraries.map((item, index) => (
-                                  <Card key={item._id}>
-                                    <Accordion.Header
-                                      onClick={() => handleToggle(index.toString())}
-                                    >
-                                      Day {index + 1} - {item.heading || 'Heading Not Found.'}
-                                    </Accordion.Header>
-                                    <Accordion.Collapse eventKey={index.toString()}>
-                                      <Card.Body className="text-dark border-top">
-                                        {item.activity || 'Activity Not Found.'}
-                                      </Card.Body>
-                                    </Accordion.Collapse>
-                                  </Card>
-                                ))}
-                            </Accordion>
-                          ) : (
-                            <Timeline events={packageData.itineraries} />
-                          )}
-                        </div>
-                      )} */}
                       {activeTab === 'trip-includes' && (
                         <div>
                           <ul>
@@ -536,7 +381,7 @@ function HotelPackageDynamic() {
                           </ul>
                         </div>
                       )}
-                    
+
                       {activeTab === 'gallery' && (
                         <div className="gallery">
                           {packageData.galleryImages &&
@@ -640,81 +485,25 @@ function HotelPackageDynamic() {
                           )}
                         </>
                       )}
-                      
                     </div>
                   </div>
                 </div>
 
-                <div className="col-12 col-lg-4 mt-2  py-3 border-2 rounded-3 shadow-sm "
-                style={{maxHeight:"150px"}}
+                <div
+                  className="col-12 col-lg-4 mt-2  py-3 border-2 rounded-3 shadow-sm "
+                  style={{ maxHeight: '150px' }}
                 >
-                <p className="text-dark mb-3">
-                        From &nbsp;
-                        {packageData &&
-                          packageData.fixedDeparture.type === false &&
-                          (packageData.offer ? (
-                            <>
-                              <span className="fw-bold  text-truncate text-decoration-line-through">
-                                ₹{packageData.costOptions.totalPrice}
-                              </span>
-                              &nbsp; &nbsp;
-                              <span>
-                                <b>
-                                  ₹
-                                  {calculateDiscountedPrice(
-                                    packageData.offer.type,
-                                    packageData.costOptions.totalPrice,
-                                    packageData.offer.value,
-                                  )}{' '}
-                                </b>
-                                /-
-                              </span>
-                            </>
-                          ) : (
-                            <span className="fw-bold ">
-                              ₹{packageData.costOptions.totalPrice} /-
-                            </span>
-                          ))}
-                        {packageData &&
-                          packageData.fixedDeparture.type === true &&
-                          (packageData.offer ? (
-                            <>
-                              <span className="fw-bold  text-truncate text-decoration-line-through">
-                                ₹{packageData.fixedDeparture.tripleSharing.totalPrice}
-                              </span>
-                              &nbsp; &nbsp;
-                              <span>
-                                <b>
-                                  ₹
-                                  {calculateDiscountedPrice(
-                                    packageData.offer.type,
-                                    packageData.fixedDeparture.tripleSharing.totalPrice,
-                                    packageData.offer.value,
-                                  )}{' '}
-                                </b>
-                                /-
-                              </span>
-                            </>
-                          ) : (
-                            <span className="fw-bold ">
-                              ₹{packageData.fixedDeparture.tripleSharing.totalPrice} /-
-                            </span>
-                          ))}
-                      </p>
-
-                  <div className='d-flex gap-3'>
-                  {!localStorage.getItem('isAdmin') && (
-                    <Button
-                      onClick={BookingClick}
-                      style={{ background: '#244855', borderColor: '#244855' }}
-                      className="text-truncate"
-                    >
-                      Book Now
-                    </Button>
-                  )}
-                 
+                  <div className="d-flex gap-3">
+                    {!localStorage.getItem('isAdmin') && (
+                      <Button
+                        onClick={BookingClick}
+                        style={{ background: '#244855', borderColor: '#244855' }}
+                        className="text-truncate"
+                      >
+                        Book Now
+                      </Button>
+                    )}
                   </div>
-                
                 </div>
               </div>
             </div>
@@ -722,22 +511,82 @@ function HotelPackageDynamic() {
             <RecomndedTrip
               destinationId={(packageData && packageData.destination[0]._id) || null}
             />
-
-            <RecmmendedHotels hotels={packageData && packageData.hotels} />
           </div>
         </div>
       </section>
 
+      <Modal show={showBookingModal} onHide={handleCloseBookingModal} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Book Now</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="container">
+            <div className="row">
+              <div className="col-12">
+                <div className="form-group">
+                  <label htmlFor="date">Start Date</label>
+                  <input
+                    type="date"
+                    className="form-control"
+                    id="date"
+                    placeholder="Enter Your Start Date"
+                    value={startDate}
+                    onChange={(e) => setStartDate(e.target.value)}
+                  />
+                </div>
+              </div>
+              <div className="col-12 mt-3">
+                <div className="form-group">
+                  <label htmlFor="people">People</label>
+                  <input
+                    type="number"
+                    className="form-control"
+                    id="people"
+                    placeholder="Enter Number of People"
+                    value={totalPeople}
+                    onChange={(e) => setTotalPeople(e.target.value)}
+                  />
+                </div>
+              </div>
+              <div className="col-12 mt-3">
+                <div className="form-group">
+                  <label htmlFor="people">Days</label>
+                  <input
+                    type="number"
+                    className="form-control"
+                    id="people"
+                    placeholder="Enter Number of Days"
+                    value={totalDays}
+                    onChange={(e) => setTotalDays(e.target.value)}
+                  />
+                </div>
+              </div>
+              <div className="col-12 mt-3">
+                <div className="form-group">
+                  <label htmlFor="price">Total Price (per person)</label>
+                  <input
+                    type="number"
+                    className="form-control"
+                    disabled
+                    value={totalBookingPrice}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseBookingModal}>
+            Close
+          </Button>
+          <Button onClick={handleBooking} variant="primary">
+            Save changes
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
       <Footer />
       <WhatsAppHelp />
-      {packageData && packageData?.galleryImages && (
-        <ItenaryPage
-          loading={btnLoading}
-          setLoading={setBtnLoading}
-          ref={childRef}
-          packageData={(packageData && packageData) || {}}
-        />
-      )}
     </>
   )
 }
