@@ -7,6 +7,9 @@ import { IoCallOutline, IoHome } from 'react-icons/io5'
 import { RiCoupon2Fill } from 'react-icons/ri'
 import { BiSolidOffer } from 'react-icons/bi'
 import { CgWebsite } from 'react-icons/cg'
+// import place icon
+import { MdPlace } from "react-icons/md";
+
 
 import { cilSpeedometer, cilUserPlus } from '@coreui/icons'
 import { CNavGroup, CNavItem } from '@coreui/react'
@@ -214,6 +217,24 @@ const _new_nav = [
         component: CNavItem,
         name: 'Testimonials',
         to: '/admin/testimonials',
+      },
+    ],
+  },
+  {
+    component: CNavGroup,
+    name: 'Places',
+    to: '/',
+    icon:  <MdPlace size={22} icon={cilUserPlus} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Add Place',
+        to: '/admin/place/add',
+      },
+      {
+        component: CNavItem,
+        name: 'All Places',
+        to: '/admin/place/all',
       },
     ],
   },

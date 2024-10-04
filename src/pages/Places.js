@@ -11,7 +11,7 @@ const Places = () => {
 
   const fetchHotels = async () => {
     try {
-      let res = await MyAPI.GET('/activeHotels')
+      let res = await MyAPI.GET('/public/places')
       let { success, message, error, data } = res.data || res
       console.log(res.data)
       if (success) {
@@ -24,26 +24,10 @@ const Places = () => {
     }
   }
 
-  const [recentHotels, setRecentHotels] = useState([])
-  const [selectedTab, setSelectedTab] = useState('recent')
-  const fetchRecentHotels = async () => {
-    try {
-      let res = await MyAPI.GET('/recent-hotels')
-      let { success, message, error, data } = res.data || res
-      console.log('recent hotel', res.data)
-      if (success) {
-        setRecentHotels(data)
-      } else {
-        MyError.error(message || error || 'Server Error Please try again later.')
-      }
-    } catch (error) {
-      MyError.error(error.message)
-    }
-  }
+  
 
   useEffect(() => {
     fetchHotels()
-    fetchRecentHotels()
   }, [])
 
   const formatDate = (dateString, format) => {
@@ -103,7 +87,7 @@ const Places = () => {
                     </Link>
                   </li>
                   <li className="breadcrumb-item active" aria-current="page">
-                    Places
+                    Places 
                   </li>
                 </ul>
               </nav>
@@ -151,7 +135,7 @@ const Places = () => {
                       <div className="col-lg-6">
                         <div className="trend-item shadow-lg bg-white mb-4 rounded overflow-hidden">
                           <div className="trend-image">
-                            <img src={hotel.coverImage} alt="image" />
+                            <img src={hotel.galleryImages[0]} alt="image" />
                           </div>
                           <div className="trend-content-main p-4 pb-2">
                             <div className="trend-content">

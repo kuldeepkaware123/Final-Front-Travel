@@ -53,7 +53,7 @@ const RecmmendedHotels = ({ hotels }) => {
                         <div className="trend-image position-relative">
                           <img
                             style={{ maxHeight: '40vh', height: '40vh' }}
-                            src={item?.coverImage}
+                            src={item?.galleryImages[0]}
                             alt="image"
                             className=""
                           />
@@ -62,7 +62,7 @@ const RecmmendedHotels = ({ hotels }) => {
                         <div className="trend-content p-4 pt-5 position-relative">
                           
                           <h3 className="mb-1">
-                            <Link to={`/hotel/${item?._id}`}>{item?.title}</Link>
+                            <Link to={`/hotel/package/${item?._id}`}>{item?.title}</Link>
                           </h3>
                           <p className=" border-b pb-1">{truncateText(item?.description, 15)}</p>
                         </div>

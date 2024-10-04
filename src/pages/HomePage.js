@@ -26,6 +26,7 @@ import WhatsAppHelp from '../components1/WhatsAppHelp'
 import EnquiryForm from './EnquiryForm'
 import EnquiryButton from '../components1/EnquiryButton'
 import EnquiryFormTimer from './EnquiryFormTimer'
+import BestHotel from '../components1/BestHotels'
 
 function HomePage() {
   const [enquiryForm, setEnquiryForm] = useState(true)
@@ -53,6 +54,7 @@ function HomePage() {
       <SliderBanner />
 
       <BestTour />
+      <BestHotel />
 
       {/* <UpcomingCommunityTrip /> */}
 

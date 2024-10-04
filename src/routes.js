@@ -88,7 +88,8 @@ const Callback = React.lazy(() => import('./views/callback/Callback.js'))
 const MyBookings = React.lazy(() => import('./views/bookings/MyBookings.js'))
 const BookingDetailsPageAdmin = React.lazy(() => import('./views/bookings/BookingDetailsPage.js'))
 const EnquiryFormEdit = React.lazy(() => import('./pages/EnquiryFormEdit.js'))
-
+const AddPlace = React.lazy(() => import('./views/place/AddPlace.js'))
+const AllPlaces = React.lazy(() => import('./views/place/AllPlaces.js'))
 const Widgets = React.lazy(() => import('./views/widgets/Widgets'))
 
 //manage admin pages
@@ -138,7 +139,16 @@ const routes = [
   { path: '/admin/bookings', name: 'Bookings All', element: MyBookings },
   { path: '/admin/booking/:bookingId', name: 'Bookings All', element: BookingDetailsPageAdmin },
   { path: '/admin/enquiry/edit/:id', name: 'Edit Enquiry', element: EnquiryFormEdit },
-
+  {
+    path: '/admin/place/add',
+    name: 'Add Place',
+    element: AddPlace,
+  },
+  {
+    path: '/admin/place/all',
+    name: 'All Places',
+    element: AllPlaces,
+  },
   // user routes
 
   { path: '/user/dashboard', name: 'Dashboard', element: DashboardUser },

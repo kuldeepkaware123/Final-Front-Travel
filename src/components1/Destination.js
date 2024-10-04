@@ -37,7 +37,7 @@ function Destination() {
   }, [])
 
   return (
-    <section className="trending pb-5 pt-5" >
+    <section className="trending pb-5 pt-5">
       <div className="container">
         <div className="section-title mb-6 w-50 mx-auto text-center">
           <h4 className="mb-1 theme1">Top Destinations</h4>
@@ -65,7 +65,7 @@ function Destination() {
                                   src={item.destinationImage}
                                   alt="image"
                                 />
-                                <div className="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-4 w-100 z-index">
+                                <div className="trend-content d-flex align-items-center justify-content-between position-absolute bottom-0 p-3 w-100 z-index">
                                   <div className="trend-content-title">
                                     <Link to={`/${item._id}`}>
                                       <h3 className="mb-0 white">
@@ -89,6 +89,10 @@ function Destination() {
                                       })()) ||
                                       0}
                                     Tours
+                                  </span>
+                                  <span className="white bg-theme p-1 px-2 rounded">
+                                    {item.hotels.length}
+                                    Hotels
                                   </span>
                                 </div>
                                 <div className="color-overlay"></div>
@@ -184,14 +188,14 @@ function Destination() {
                                     <span className="white bg-theme p-1 px-2 rounded">
                                       {item.packages && item.packages.length > 0
                                         ? (() => {
-                                          let len = 0
-                                          item.packages.forEach((pa) => {
-                                            if (!pa.isPrivate) {
-                                              len += 1
-                                            }
-                                          })
-                                          return len
-                                        })()
+                                            let len = 0
+                                            item.packages.forEach((pa) => {
+                                              if (!pa.isPrivate) {
+                                                len += 1
+                                              }
+                                            })
+                                            return len
+                                          })()
                                         : '0'}
                                       &nbsp; Tours
                                     </span>

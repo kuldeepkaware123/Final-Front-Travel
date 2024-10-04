@@ -45,7 +45,7 @@ const BestHotel = () => {
 
   const updateHotelStatus = async (id, status) => {
     try {
-      let res = await MyAPI.PUT(`/admin/featured/package`, { packageId: id, status }, token)
+      let res = await MyAPI.PUT(`/admin/hotel/featured/${id}`,{}, token)
       let { success, message, error } = res.data || res
       if (success) {
         getAllHotels()

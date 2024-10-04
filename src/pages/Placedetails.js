@@ -1,47 +1,46 @@
-import React from 'react'
-import { Container, Row, Col, Card, Button, Carousel, Nav } from 'react-bootstrap'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import Header from '../components1/Header'
-import Footer from '../components1/Footer'
-
-const dummyData = {
-  heroSection: {
-    title: 'Welcome to Your Destination',
-    description: 'Discover a world of adventure and natural beauty in this perfect vacation spot.',
-  },
-  youtubelink: 'https://www.youtube.com/embed/lF7ElMRywHo?si=hOSkZ2t9cuIrcwlO',
-  pictureSections: [
-    {
-      heading: 'Heading 1',
-      text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. lorem ipsum dolor sit amet, consectetur adipiscing elit. lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-      image: 'https://via.placeholder.com/500x300',
-    },
-    {
-      heading: 'Heading 2',
-      text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. lorem ipsum dolor sit amet, consectetur adipiscing elit. lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-      image: 'https://via.placeholder.com/500x300',
-    },
-  ],
-  informationSections: [
-    {
-      heading: 'About the Destination',
-      text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. lorem ipsum dolor sit amet, consectetur adipiscing elit. lorem ipsum dolor sit amet, consectetur adipiscing elit. lorem ipsum dolor sit amet, consectetur adipiscing elit. lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. lorem ipsum dolor sit amet, consectetur adipiscing elit. lorem ipsum dolor sit amet, consectetur adipiscing elit. lorem ipsum dolor sit amet, consectetur adipiscing elit. lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-    },
-    {
-      heading: 'Why Visit?',
-      text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. lorem ipsum dolor sit amet, consectetur adipiscing elit. lorem ipsum dolor sit amet, consectetur adipiscing elit. lorem ipsum dolor sit amet, consectetur adipiscing elit. lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. lorem ipsum dolor sit amet, consectetur adipiscing elit. lorem ipsum dolor sit amet, consectetur adipiscing elit. lorem ipsum dolor sit amet, consectetur adipiscing elit. lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
-    },
-  ],
-  howToReach: [
-    { mode: 'By Air', info: 'Nearest airport is XYZ, 30 minutes away from the city.' },
-    { mode: 'By Train', info: 'The closest railway station is 10 minutes from downtown.' },
-    { mode: 'By Road', info: 'Well-connected by road to major cities nearby. ' },
-  ],
-  relatedPackages: ['Adventure Package', 'Relaxation Package', 'Cultural Tour'],
-  nearestHotels: ['Hotel Paradise', 'Mountain Resort', 'City Lodge'],
-}
+import React, { useEffect, useState } from 'react';
+import { Container, Row, Col, Card } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Header from '../components1/Header';
+import Footer from '../components1/Footer';
+import { MyAPI, MyError } from '../MyAPI';
+import { useParams } from 'react-router-dom';
 
 const Placedetails = () => {
+  const [places, setPlaces] = useState(null); // Initialize as null to handle loading state
+  const [loading, setLoading] = useState(false);
+  const { id } = useParams();
+
+  const fetchAllPlaces = async () => {
+    setLoading(true);
+    try {
+      let res = await MyAPI.GET(`/public/place/${id}`);
+      let { success, message, error, data } = res.data || res;
+
+      if (success) {
+        setPlaces(data);
+      } else {
+        MyError.error(message || error || 'Server Error. Please try again later.');
+      }
+    } catch (error) {
+      MyError.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchAllPlaces();
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>; // Simple loading state
+  }
+
+  if (!places) {
+    return <div>No data available</div>; // Handle no data case
+  }
+
   return (
     <>
       <Header />
@@ -51,47 +50,40 @@ const Placedetails = () => {
           className="hero-section text-center d-flex align-items-center justify-content-center"
           style={{
             height: '70vh',
-            background: 'url(https://via.placeholder.com/1200x800) center/cover',
+            background: `url(${places.galleryImages[0]}) center/cover`,
             color: 'white',
           }}
         >
           <div className="hero-content">
-            <h1 className="display-4">{dummyData.heroSection.title}</h1>
-            <p className="lead">{dummyData.heroSection.description}</p>
+            <h1 className="display-4">{places.title}</h1>
+            <p className="lead">{places.description}</p>
           </div>
         </section>
 
         {/* Picture + Text Sections */}
         <Container className="my-5">
-          <Row>
-            <div className="col-md-6">
-              <img src={dummyData.pictureSections[0].image} />
-            </div>
-            <div className="col-md-6">
-              <h2>{dummyData.pictureSections[0].heading}</h2>
-              <p>{dummyData.pictureSections[0].text}</p>
-            </div>
-          </Row>
-          <Row className="mt-5">
-            <div className="col-md-6">
-              <h2>{dummyData.pictureSections[1].heading}</h2>
-              <p>{dummyData.pictureSections[1].text}</p>
-            </div>
-            <div className="col-md-6 text-end">
-              <img src={dummyData.pictureSections[1].image} />
-            </div>
-          </Row>
+          {places.content.map((section, index) => (
+            <Row key={section._id} className={index % 2 === 0 ? 'mb-5' : 'mb-5 flex-row-reverse'}>
+              <Col md={6}>
+                <h2>{section.heading}</h2>
+                <p>{section.description}</p>
+              </Col>
+              <Col md={6}>
+                <img src={places.galleryImages[index % places.galleryImages.length]} alt={section.heading} className="img-fluid" />
+              </Col>
+            </Row>
+          ))}
         </Container>
 
         {/* Information Sections */}
         <Container className="my-5">
           <div>
-            <h2>{dummyData.informationSections[0].heading}</h2>
-            <p>{dummyData.informationSections[0].text}</p>
+            <h2>About the Destination</h2>
+            <p>{places.aboutThePlace}</p>
           </div>
-          <div className='mt-5'>
-            <h2>{dummyData.informationSections[1].heading}</h2>
-            <p>{dummyData.informationSections[1].text}</p>
+          <div className="mt-5">
+            <h2>Why Visit?</h2>
+            <p>{places.whyVisit}</p>
           </div>
         </Container>
 
@@ -101,17 +93,13 @@ const Placedetails = () => {
             <Col md={6} className="mb-4">
               <Card className="shadow-sm">
                 <Card.Body>
-                  <div
-                    style={{ height: '300px', backgroundColor: '#ddd' }}
-                    className="d-flex align-items-center justify-content-center"
-                  >
+                  <div style={{ height: '300px', backgroundColor: '#ddd' }} className="d-flex align-items-center justify-content-center">
                     <iframe
                       width="100%"
                       height="100%"
-                      src={dummyData.youtubelink}
+                      src={places.ytLink.replace('watch?v=', 'embed/')}
                       title="YouTube video player"
-                      allow="accelerometer; autoplay; clipboardWrite; encryptedMedia; gyroscope; pictureInPicture; webShare"
-                      referrerPolicy="strict-origin-when-cross-origin"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                       allowFullScreen
                     ></iframe>
                   </div>
@@ -121,11 +109,11 @@ const Placedetails = () => {
             <Col md={6} className="mb-4">
               <Card className="shadow-sm" style={{ height: '332px' }}>
                 <Card.Body>
-                  <Card.Title className="text-dark fs-3 ">How to Reach</Card.Title>
+                  <Card.Title className="text-dark fs-3">How to Reach</Card.Title>
                   <ul>
-                    {dummyData.howToReach.map((reach, index) => (
+                    {places.howToReach.split('.').map((reach, index) => (
                       <li key={index} className="fs-5 py-2">
-                        <strong>{reach.mode}</strong>: {reach.info}
+                        {reach.trim() && <span>{reach.trim()}.</span>}
                       </li>
                     ))}
                   </ul>
@@ -137,7 +125,7 @@ const Placedetails = () => {
       </Container>
       <Footer />
     </>
-  )
-}
+  );
+};
 
-export default Placedetails
+export default Placedetails;

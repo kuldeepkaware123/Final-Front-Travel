@@ -23,10 +23,8 @@ Header() {
       let { success, message, error, data } = res.data || res
       if (success) {
         //filter this data befor set !isPrivate
-        const filteredDestinations = data.filter((destination) =>
-          destination.packages.some((pkg) => !pkg.isPrivate && pkg.status === 'active'),
-        )
-        setAllDestinations(filteredDestinations)
+      
+        setAllDestinations(data)
       } else {
         MyError.error(message || error || 'Server Error Please try again later.')
       }
